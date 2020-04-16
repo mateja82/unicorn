@@ -1,3 +1,5 @@
+appdirs==1.4.3
+astroid==2.3.3
 attrs==19.3.0
 aws-cdk.assets==1.32.2
 aws-cdk.aws-apigateway==1.32.2
@@ -42,9 +44,17 @@ aws-cdk.cx-api==1.32.2
 aws-cdk.region-info==1.32.2
 cattrs==1.0.0
 constructs==2.0.1
--e git+https://github.com/mateja82/unicorn@2c07a61a4263fab828f93d5ded038827998a2b4d#egg=iac&subdirectory=iac
+distlib==0.3.0
+filelock==3.0.12
+-e git+https://github.com/mateja82/unicorn@755d20f84b2807b68fc6a4694152d063b962a93d#egg=iac&subdirectory=iac
+isort==4.3.21
 jsii==1.1.0
+lazy-object-proxy==1.4.3
+mccabe==0.6.1
 publication==0.0.3
+pylint==2.4.4
 python-dateutil==2.8.1
 six==1.14.0
 typing-extensions==3.7.4.2
+virtualenv==20.0.17
+wrapt==1.11.2
