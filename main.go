@@ -9,17 +9,21 @@ import (
 )
 
 var router *gin.Engine
+var StaticContent string
 
 func main() {
 	// Set Gin to production mode
 	gin.SetMode(gin.ReleaseMode)
+
+	StaticContent = "templates/*"
+	//StaticContent = "https://s3-prod-unicorn.s3-eu-west-1.amazonaws.com/*"
 
 	// Set the router as the default one provided by Gin
 	router = gin.Default()
 
 	// Process the templates at the start so that they don't have to be loaded
 	// from the disk again. This makes serving HTML pages very fast.
-	router.LoadHTMLGlob("templates/*")
+	router.LoadHTMLGlob(StaticContent)
 
 	// Initialize the routes
 	initializeRoutes()
