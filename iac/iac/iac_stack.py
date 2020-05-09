@@ -71,7 +71,7 @@ class IacStack(core.Stack):
             # Configure a verification email, sent by default Cognito email address (no-reply@verificationemail.com)
             user_verification=cognito.UserVerificationConfig(
                 email_subject="Unicorn Pursuit: Verify your email",
-                email_body="Hello {username}. Welcome to Unicorn Pursuit! Follow the link {##Verify Email##} to confirm your email address.",
+                email_body="Hi, and welcome to Unicorn Pursuit! Follow the {##Verify Email##} to confirm your email address.",
                 email_style=cognito.VerificationEmailStyle.LINK,
             ),
             # Set up required password policy
@@ -88,14 +88,37 @@ class IacStack(core.Stack):
         client = userpool.add_client(
             "UnicornAppClient",
             user_pool_client_name="UnicornAppClient",
-            auth_flows={
-                "user_password": True,
-                "refresh_token": True,
-            },
+            generate_secret=False,
+             
+            ## We'll allow both Flows, Implicit and Authorization Code, and decide in the app which to use.
+            auth_flows=cognito.AuthFlow(
+                admin_user_password=False,
+                custom=False,
+                refresh_token=True,
+                user_password=False,
+                user_srp=False
+                ),
+            
+            ## We'll allow both Flows, Implicit and Authorization Code, and decide in the app which to use.
+            o_auth=cognito.OAuthSettings(
+                    flows=cognito.OAuthFlows(
+                        authorization_code_grant=True,
+                        implicit_code_grant=True,
+                    ),
+
+                    ## If you don't have any preferences, it's all right to allow all scopes.
+                    scopes=[cognito.OAuthScope.EMAIL,cognito.OAuthScope.OPENID,cognito.OAuthScope.PHONE,cognito.OAuthScope.PROFILE,cognito.OAuthScope.COGNITO_ADMIN],
+                    
+                    ## We need to define our CALLBACK URL, meaning - where our users are redirected when authenticated.
+                    callback_urls=["https://www.unicornpursuit.com"]   
+                ),
+
         )
 
         client_id = client.user_pool_client_id
 
+        # Test URL: https://auth.unicornpursuit.com/login?response_type=code&client_id=4un2qodp09fojc5bm7ibb6a8u6&redirect_uri=https://www.unicornpursuit.com
+        
         ## Cognito: Create Domain for auth.unicornpursuit.com
         certificate_arn="arn:aws:acm:us-east-1:057097267726:certificate/953cc4d7-f344-403f-87ce-f9b96153a304"
         domain_cert = acm.Certificate.from_certificate_arn(self, "domainCert", certificate_arn)
