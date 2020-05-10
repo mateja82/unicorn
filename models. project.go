@@ -5,8 +5,10 @@ package main
 import "errors"
 
 type project struct {
-	ID      int    `json:"id"`
-	Title   string `json:"title"`
+	// Owner needs to be added, as an automatically registeted email address.
+	ID    int    `json:"id"`
+	Title string `json:"title"`
+	//	Owner   string `json:"owner"`
 	Content string `json:"content"`
 	Photo   string `json:"photo"`
 	Votes   int    `json:"votes"`

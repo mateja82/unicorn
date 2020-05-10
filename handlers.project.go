@@ -23,7 +23,6 @@ func showProjectCreationPage(c *gin.Context) {
 	render(c, gin.H{
 		"title": "Create New Project"}, "create-project.html")
 }
-
 func getProject(c *gin.Context) {
 	// Check if the project ID is valid
 	if projectID, err := strconv.Atoi(c.Param("project_id")); err == nil {
