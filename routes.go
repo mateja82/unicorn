@@ -2,6 +2,13 @@
 
 package main
 
+import (
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+
+	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+)
+
 func initializeRoutes() {
 
 	// Use the setUserStatus middleware for every route to set a flag
@@ -10,6 +17,21 @@ func initializeRoutes() {
 
 	// Handle the index route
 	router.GET("/", showIndexPage)
+
+	// Create AWS Session
+	conf := &aws.Config{Region: aws.String("eu-west-1")}
+	sess, err := session.NewSession(conf)
+	if err != nil {
+		panic(err)
+	}
+
+	// Define object with Cognito Stuff
+	ce := CognitoExample{
+		CognitoClient: cognito.New(sess),
+		RegFlow:       &regFlow{},
+		UserPoolID:    "CognitoUnicornUserPool",
+		AppClientID:   "4un2qodp09fojc5bm7ibb6a8u6",
+	}
 
 	// Group user related routes together
 	userRoutes := router.Group("/u")
@@ -21,7 +43,7 @@ func initializeRoutes() {
 
 		// Handle POST requests at /u/login
 		// Ensure that the user is not logged in by using the middleware
-		userRoutes.POST("/login", ensureNotLoggedIn(), performLogin)
+		userRoutes.POST("/login", ensureNotLoggedIn(), performLogin(ce))
 
 		// Handle GET requests at /u/logout
 		// Ensure that the user is logged in by using the middleware

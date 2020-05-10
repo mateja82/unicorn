@@ -6,17 +6,31 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
+	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 )
 
 var router *gin.Engine
-var StaticContent string
+
+// CognitoExample holds internals for auth flow.
+type CognitoExample struct {
+	CognitoClient *cognito.CognitoIdentityProvider
+	RegFlow       *regFlow
+	UserPoolID    string
+	AppClientID   string
+}
+
+type regFlow struct {
+	Username string
+}
 
 func main() {
 	// Set Gin to production mode
 	gin.SetMode(gin.ReleaseMode)
 
+	var StaticContent string
+
 	StaticContent = "templates/*"
-	//StaticContent = "https://s3-prod-unicorn.s3-eu-west-1.amazonaws.com/*"
 
 	// Set the router as the default one provided by Gin
 	router = gin.Default()

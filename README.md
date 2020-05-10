@@ -5,8 +5,12 @@
 Web written in Go.
 
 Architecture:
+
 - Front and App - Golang in Docker, AWS Fargate + ALB with SSL
+- Cognito for Authentication and Authorization
 - API Gateway
-- DynamoDB for Leaderboards and Session Info
+- DynamoDB for Leader boards and Session Info
 - Aurora for User Info
-- S3 for Static Content
+- S3 for Static Content (images etc)
+
+

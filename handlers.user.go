@@ -8,39 +8,66 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/aws/aws-sdk-go/aws"
+
+	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 )
 
+const flowUsernamePassword = "USER_PASSWORD_AUTH"
+const flowRefreshToken = "REFRESH_TOKEN_AUTH"
+
 func showLoginPage(c *gin.Context) {
+
 	// Call the render function with the name of the template to render
 	render(c, gin.H{
 		"title": "Login",
 	}, "login.html")
 }
 
-func performLogin(c *gin.Context) {
-	// Obtain the POSTed username and password values
-	username := c.PostForm("username")
-	password := c.PostForm("password")
+func performLogin(ce CognitoExample) gin.HandlerFunc {
+	fn := func(c *gin.Context) {
+		// Obtain the POSTed username and password values
+		username := c.PostForm("username")
+		password := c.PostForm("password")
 
-	//var sameSiteCookie http.SameSite
+		// Authentication Flow for Login to Cognito
+		flow := aws.String(flowUsernamePassword)
+		params := map[string]*string{
+			"USERNAME": aws.String(username),
+			"PASSWORD": aws.String(password),
+		}
 
-	// Check if the username/password combination is valid
-	if isUserValid(username, password) {
-		// If the username/password is valid set the token in a cookie
-		token := generateSessionToken()
-		c.SetCookie("token", token, 3600, "", "", false, true)
-		c.Set("is_logged_in", true)
+		authTry := &cognito.InitiateAuthInput{
+			AuthFlow:       flow,
+			AuthParameters: params,
+			ClientId:       aws.String(ce.AppClientID),
+		}
 
-		render(c, gin.H{
-			"title": "Successful Login"}, "login-successful.html")
+		_, err := ce.CognitoClient.InitiateAuth(authTry)
+		if err != nil {
+			// If the username/password combination is invalid,
+			// show the error message on the login page
+			c.HTML(http.StatusBadRequest, "login.html", gin.H{
+				"ErrorTitle":   "Login Failed",
+				"ErrorMessage": "Invalid credentials provided"})
+		} else {
 
-	} else {
-		// If the username/password combination is invalid,
-		// show the error message on the login page
-		c.HTML(http.StatusBadRequest, "login.html", gin.H{
-			"ErrorTitle":   "Login Failed",
-			"ErrorMessage": "Invalid credentials provided"})
+			// Check if the username/password combination is valid
+			if isUserValid(username, password) {
+				// If the username/password is valid set the token in a cookie
+				token := generateSessionToken()
+				c.SetCookie("token", token, 3600, "", "", false, true)
+				c.Set("is_logged_in", true)
+
+				render(c, gin.H{
+					"title": "Successful Login"}, "login-successful.html")
+				return
+			}
+		}
 	}
+	return gin.HandlerFunc(fn)
+
 }
 
 func generateSessionToken() string {
