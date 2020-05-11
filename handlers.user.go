@@ -132,9 +132,9 @@ func register(ce CognitoExample) gin.HandlerFunc {
 				"ErrorTitle":   "Registration Failed",
 				"ErrorMessage": err.Error()})
 		} else {
-
+			ce.RegFlow.Username = username
 			render(c, gin.H{
-				"title": "All OK, redirected to One Time Password"}, "otp.html")
+				"title": "Redirected to One Time Password"}, "otp.html")
 
 		}
 
@@ -178,9 +178,20 @@ func OTP(ce CognitoExample) gin.HandlerFunc {
 				"title": "Successful registration & Login"}, "login-successful.html")
 
 		}
-
-		//http.Redirect(w, r, "/username", http.StatusFound)
 	}
 
 	return gin.HandlerFunc(fn)
+}
+
+// Global Pages are temporally here, cause I wasn't sure where to put them
+func showAboutPage(c *gin.Context) {
+	// Call the render function with the name of the template to render
+	render(c, gin.H{
+		"title": "About"}, "about.html")
+}
+
+func showLeaderboardPage(c *gin.Context) {
+	// Call the render function with the name of the template to render
+	render(c, gin.H{
+		"title": "Leaderboard"}, "leaderboard.html")
 }

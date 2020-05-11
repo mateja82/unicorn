@@ -3,10 +3,13 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
 func initializeRoutes() {
@@ -25,15 +28,41 @@ func initializeRoutes() {
 		panic(err)
 	}
 
+	// Get value of Cognito Application Client ID
+	ssmsvc := ssm.New(sess, aws.NewConfig().WithRegion("eu-west-1"))
+
+	ClientIDKey := "CognitoAppClientID"
+	withDecryption := true
+	param, err := ssmsvc.GetParameter(&ssm.GetParameterInput{
+		Name:           &ClientIDKey,
+		WithDecryption: &withDecryption,
+	})
+
+	// ClientIDValue stores the value of Cognito Application Client ID
+	ClientIDValue := *param.Parameter.Value
+	fmt.Println(ClientIDValue)
+
 	// Define object with Cognito Stuff
 	ce := CognitoExample{
 		CognitoClient: cognito.New(sess),
 		RegFlow:       &regFlow{},
 		UserPoolID:    "CognitoUnicornUserPool",
-		AppClientID:   "78m5ubiiif91ktscns5self44g",
+		AppClientID:   ClientIDValue,
 	}
 
-	// Group user related routes together
+	//Group Global routes (About, Leaderboard)
+	globalRoutes := router.Group("/g")
+	{
+		// Handle the GET requests at /g/about
+		// Ensure that the user is logged in by using the middleware
+		globalRoutes.GET("/leaderboard", showAboutPage)
+
+		// Handle POST requests at /g/leaderboard
+		// Ensure that the user is logged in by using the middleware
+		globalRoutes.GET("/about", ensureLoggedIn(), showLeaderboardPage)
+	}
+
+	// Group User routes together (Login, Register)
 	userRoutes := router.Group("/u")
 	{
 		// Handle the GET requests at /u/login
@@ -68,7 +97,7 @@ func initializeRoutes() {
 		userRoutes.POST("/otp", ensureNotLoggedIn(), OTP(ce))
 	}
 
-	// Group project related routes together
+	// Group Project routes (View, Create)
 	projectRoutes := router.Group("/project")
 	{
 		// Handle GET requests at /project/view/some_project_id
