@@ -30,7 +30,7 @@ func initializeRoutes() {
 		CognitoClient: cognito.New(sess),
 		RegFlow:       &regFlow{},
 		UserPoolID:    "CognitoUnicornUserPool",
-		AppClientID:   "4un2qodp09fojc5bm7ibb6a8u6",
+		AppClientID:   "78m5ubiiif91ktscns5self44g",
 	}
 
 	// Group user related routes together
