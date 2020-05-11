@@ -3,6 +3,7 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -44,7 +45,8 @@ func performLogin(ce CognitoExample) gin.HandlerFunc {
 			ClientId:       aws.String(ce.AppClientID),
 		}
 
-		_, err := ce.CognitoClient.InitiateAuth(authTry)
+		result, err := ce.CognitoClient.InitiateAuth(authTry)
+
 		if err != nil {
 			// If the username/password combination is invalid,
 			// show the error message on the login page
@@ -52,18 +54,19 @@ func performLogin(ce CognitoExample) gin.HandlerFunc {
 				"ErrorTitle":   "Login Failed",
 				"ErrorMessage": "Invalid credentials provided"})
 		} else {
-
+			fmt.Println(result)
+			// set Context to OK
 			// Check if the username/password combination is valid
-			if isUserValid(username, password) {
-				// If the username/password is valid set the token in a cookie
-				token := generateSessionToken()
-				c.SetCookie("token", token, 3600, "", "", false, true)
-				c.Set("is_logged_in", true)
+			//			if isUserValid(username, password) {
+			// If the username/password is valid set the token in a cookie
+			token := generateSessionToken()
+			c.SetCookie("token", token, 3600, "", "", false, true)
+			c.Set("is_logged_in", true)
 
-				render(c, gin.H{
-					"title": "Successful Login"}, "login-successful.html")
-				return
-			}
+			render(c, gin.H{
+				"title": "Successful Login"}, "login-successful.html")
+			return
+			//}
 		}
 	}
 	return gin.HandlerFunc(fn)
