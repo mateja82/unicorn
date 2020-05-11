@@ -132,7 +132,45 @@ func register(ce CognitoExample) gin.HandlerFunc {
 				"ErrorTitle":   "Registration Failed",
 				"ErrorMessage": err.Error()})
 		} else {
+
+			render(c, gin.H{
+				"title": "All OK, redirected to One Time Password"}, "otp.html")
+
+		}
+
+	}
+	return gin.HandlerFunc(fn)
+}
+
+func showOTPPage(c *gin.Context) {
+	// Call the render function with the name of the template to render
+	render(c, gin.H{
+		"title": "OTP"}, "otp.html")
+}
+
+// OTP is Handling One Time Password
+func OTP(ce CognitoExample) gin.HandlerFunc {
+	fn := func(c *gin.Context) {
+
+		otp := c.PostForm("otp")
+
+		user := &cognito.ConfirmSignUpInput{
+			ConfirmationCode: aws.String(otp),
+			Username:         aws.String(ce.RegFlow.Username),
+			ClientId:         aws.String(ce.AppClientID),
+		}
+
+		result, err := ce.CognitoClient.ConfirmSignUp(user)
+
+		if err != nil {
+			fmt.Println(err)
+			c.HTML(http.StatusBadRequest, "otp.html", gin.H{
+				"ErrorTitle":   "OTP Failed",
+				"ErrorMessage": err.Error()})
+		} else {
+			fmt.Println(result)
 			token := generateSessionToken()
+
 			c.SetCookie("token", token, 3600, "", "", false, true)
 			c.Set("is_logged_in", true)
 
@@ -141,6 +179,8 @@ func register(ce CognitoExample) gin.HandlerFunc {
 
 		}
 
+		//http.Redirect(w, r, "/username", http.StatusFound)
 	}
+
 	return gin.HandlerFunc(fn)
 }
