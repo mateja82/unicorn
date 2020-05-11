@@ -11,7 +11,6 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/aws/aws-sdk-go/aws"
-
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 )
 
@@ -52,21 +51,20 @@ func performLogin(ce CognitoExample) gin.HandlerFunc {
 			// show the error message on the login page
 			c.HTML(http.StatusBadRequest, "login.html", gin.H{
 				"ErrorTitle":   "Login Failed",
-				"ErrorMessage": "Invalid credentials provided"})
+				"ErrorMessage": "Invalid credentials"})
 		} else {
 			fmt.Println(result)
-			// set Context to OK
-			// Check if the username/password combination is valid
-			//			if isUserValid(username, password) {
-			// If the username/password is valid set the token in a cookie
+			// Set Token and ïs_logged_in Boolean, and jump to a different Menu
+			// NEXT STEP: Import TOKEN variable from Login
+
 			token := generateSessionToken()
+
 			c.SetCookie("token", token, 3600, "", "", false, true)
 			c.Set("is_logged_in", true)
 
 			render(c, gin.H{
 				"title": "Successful Login"}, "login-successful.html")
 			return
-			//}
 		}
 	}
 	return gin.HandlerFunc(fn)
@@ -97,28 +95,52 @@ func showRegistrationPage(c *gin.Context) {
 		"title": "Register"}, "register.html")
 }
 
-func register(c *gin.Context) {
-	// Obtain the POSTed username and password values
-	username := c.PostForm("username")
-	password := c.PostForm("password")
+func register(ce CognitoExample) gin.HandlerFunc {
+	fn := func(c *gin.Context) {
 
-	// var sameSiteCookie http.SameSite
+		// Obtain the POSTed username and password values
+		username := c.PostForm("username")
+		password := c.PostForm("password")
+		fullname := c.PostForm("name")
+		emailAddress := c.PostForm("email")
+		phoneNumber := c.PostForm("phone_number")
 
-	if _, err := registerNewUser(username, password); err == nil {
-		// If the user is created, set the token in a cookie and log the user in
-		token := generateSessionToken()
-		c.SetCookie("token", token, 3600, "", "", false, true)
-		c.Set("is_logged_in", true)
+		user := &cognito.SignUpInput{
+			Username: aws.String(username),
+			Password: aws.String(password),
+			ClientId: aws.String(ce.AppClientID),
+			UserAttributes: []*cognito.AttributeType{
+				{
+					Name:  aws.String("email"),
+					Value: aws.String(emailAddress),
+				},
+				{
+					Name:  aws.String("name"),
+					Value: aws.String(fullname),
+				},
+				{
+					Name:  aws.String("phone_number"),
+					Value: aws.String(phoneNumber),
+				},
+			},
+		}
 
-		render(c, gin.H{
-			"title": "Successful registration & Login"}, "login-successful.html")
+		_, err := ce.CognitoClient.SignUp(user)
+		if err != nil {
+			fmt.Println(err)
+			c.HTML(http.StatusBadRequest, "register.html", gin.H{
+				"ErrorTitle":   "Registration Failed",
+				"ErrorMessage": err.Error()})
+		} else {
+			token := generateSessionToken()
+			c.SetCookie("token", token, 3600, "", "", false, true)
+			c.Set("is_logged_in", true)
 
-	} else {
-		// If the username/password combination is invalid,
-		// show the error message on the login page
-		c.HTML(http.StatusBadRequest, "register.html", gin.H{
-			"ErrorTitle":   "Registration Failed",
-			"ErrorMessage": err.Error()})
+			render(c, gin.H{
+				"title": "Successful registration & Login"}, "login-successful.html")
+
+		}
 
 	}
+	return gin.HandlerFunc(fn)
 }

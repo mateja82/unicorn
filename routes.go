@@ -56,7 +56,7 @@ func initializeRoutes() {
 
 		// Handle POST requests at /u/register
 		// Ensure that the user is not logged in by using the middleware
-		userRoutes.POST("/register", ensureNotLoggedIn(), register)
+		userRoutes.POST("/register", ensureNotLoggedIn(), register(ce))
 	}
 
 	// Group project related routes together
