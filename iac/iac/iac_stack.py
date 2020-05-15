@@ -56,7 +56,7 @@ class IacStack(core.Stack):
             
             ## Require username or email for users to sign in
             sign_in_aliases=cognito.SignInAliases(
-                username=True,
+                username=False,
                 email=True,
             ),
             # Require users to give their full name when signing up
@@ -72,7 +72,7 @@ class IacStack(core.Stack):
             ),
             # Configure OTP Settings ()
             user_verification=cognito.UserVerificationConfig(
-                sms_message="Hey {username}, welcome to Unicorn Pursuit! Your OTP is {####}",
+                sms_message="Hey Unicorn Hunter, welcome to Unicorn Pursuit! Your OTP is {####}",
             ),
             # Set up required password policy
             password_policy=cognito.PasswordPolicy(

@@ -28,7 +28,7 @@ func showLoginPage(c *gin.Context) {
 func performLogin(ce CognitoExample) gin.HandlerFunc {
 	fn := func(c *gin.Context) {
 		// Obtain the POSTed username and password values
-		username := c.PostForm("username")
+		username := c.PostForm("email")
 		password := c.PostForm("password")
 
 		// Authentication Flow for Login to Cognito
@@ -99,7 +99,7 @@ func register(ce CognitoExample) gin.HandlerFunc {
 	fn := func(c *gin.Context) {
 
 		// Obtain the POSTed username and password values
-		username := c.PostForm("username")
+		username := c.PostForm("email")
 		password := c.PostForm("password")
 		fullname := c.PostForm("name")
 		emailAddress := c.PostForm("email")
