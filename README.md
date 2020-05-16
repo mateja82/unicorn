@@ -1,6 +1,12 @@
 # Unicorn Project
 
-Unicorn Project is an open source Cloud Learning initiative.
+Unicorn Project is an open source Cloud Learning initiative. If you are one of these, you're in the right place:
+
+- Developer, who wants to go deeper to Cloud and DevOps.
+- SysAdmin, who wants to go deeper to Cloud and DevOps.
+- Cloud Engineer or Achitect who wants to learn more about end-to-end application design and deployment in the Cloud.
+
+Regardless if you're an absolute beginner, or an experienced professional - we promisse you that you'll learn a bunch.
 
 Unicorn Project has a single objective: to **help you become a Cloud Ninja, or improve your Ninja Skills**. Cloud Ninja may mean Cloud Developer, Cloud Engineer or a Cloud Architect.
 
