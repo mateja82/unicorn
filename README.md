@@ -4,6 +4,8 @@ Unicorn Project is an open source Cloud Learning initiative.
 
 Unicorn Project has a single objective: to **help you become a Cloud Ninja, or improve your Ninja Skills**. Cloud Ninja may mean Cloud Developer, Cloud Engineer or a Cloud Architect.
 
+If you want to improve your skill in Cloud, Serverless, Web development in Cloud (frontend and backend) - **you're in the right place**! Keep reading.
+
 ## Unicorn Project = Unicorn Pursuit + Unicorn Workshop
 
 Unicorn Project has two components:
@@ -35,10 +37,9 @@ unicorn
 │   └── iac
 │       └── __pycache__
 └── templates
-
 ```
 
-The `main.go` and the rest of the Go packages are in the root folder.
+The `main.go` and the rest of the Go packages are in the `root` folder.
 
 Go HTML Templates are in the `template` folder.
 
@@ -50,4 +51,8 @@ The entire documentation is currently stored on Mats Cloud (a personal blog). Th
 
 You can find all the information about Unicorn Pursuit and Unicorn Workshop [on Mats Cloud](https://www.matscloud.com/docs/).
 
-**Please feel free to start your Cloud Ninja journey, contribute if you want, and give feedback so we can improve**
+**Please feel free to start your Cloud Ninja journey, contribute if you want, and give feedback so we can improve**.
+
+## Requirements & Dev Environment
+
+You can find all the requirements, and how to build your Dev environment [here](https://www.matscloud.com/docs/dev-environment/). Based on the technology that interests you most, you may not need to install the entire set of tools.
