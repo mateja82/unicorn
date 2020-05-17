@@ -30,7 +30,7 @@ The beauty of Unicorn Project is that it allows you to choose the part of techno
 - **AWS Serverless** (Lambda, Cognito, DynamoDB, Gargate etc.).
 - All AWS resources provisioned using **AWS CDK (Cloud Development Kit) - Python**.
 - **Go (golang)**.
-- **Gin** sweb development framework for Go.
+- **Gin** web development framework for Go.
 
 For more details about [Unicorn Pursuit Architecture, click here](https://www.matscloud.com/docs/unicorn-project/architecture/).
 
