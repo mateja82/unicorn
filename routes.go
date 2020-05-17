@@ -54,12 +54,11 @@ func initializeRoutes() {
 	globalRoutes := router.Group("/g")
 	{
 		// Handle the GET requests at /g/about
-		// Ensure that the user is logged in by using the middleware
-		globalRoutes.GET("/leaderboard", showAboutPage)
+		globalRoutes.GET("/about", showAboutPage)
 
 		// Handle POST requests at /g/leaderboard
 		// Ensure that the user is logged in by using the middleware
-		globalRoutes.GET("/about", ensureLoggedIn(), showLeaderboardPage)
+		globalRoutes.GET("/leaderboard", ensureLoggedIn(), showLeaderboardPage)
 	}
 
 	// Group User routes together (Login, Register)

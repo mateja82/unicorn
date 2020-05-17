@@ -105,6 +105,7 @@ func register(ce CognitoExample) gin.HandlerFunc {
 		emailAddress := c.PostForm("email")
 		phoneNumber := c.PostForm("phone_number")
 
+		// create a Cognito user object
 		user := &cognito.SignUpInput{
 			Username: aws.String(username),
 			Password: aws.String(password),
@@ -124,7 +125,7 @@ func register(ce CognitoExample) gin.HandlerFunc {
 				},
 			},
 		}
-
+  		// attempt SignUp with the created user object
 		_, err := ce.CognitoClient.SignUp(user)
 		if err != nil {
 			fmt.Println(err)
@@ -132,6 +133,7 @@ func register(ce CognitoExample) gin.HandlerFunc {
 				"ErrorTitle":   "Registration Failed",
 				"ErrorMessage": err.Error()})
 		} else {
+			// is Success, store username in the regFlow and redirect to OTP
 			ce.RegFlow.Username = username
 			render(c, gin.H{
 				"title": "Redirected to One Time Password"}, "otp.html")
@@ -152,16 +154,18 @@ func showOTPPage(c *gin.Context) {
 func OTP(ce CognitoExample) gin.HandlerFunc {
 	fn := func(c *gin.Context) {
 
+		// We need to get the code that user typed in the html form
 		otp := c.PostForm("otp")
 
+		// Creating a user object to ConfirmSignUp
 		user := &cognito.ConfirmSignUpInput{
 			ConfirmationCode: aws.String(otp),
 			Username:         aws.String(ce.RegFlow.Username),
 			ClientId:         aws.String(ce.AppClientID),
 		}
 
+  		// Confirm SignUp with Cognito Application Client
 		result, err := ce.CognitoClient.ConfirmSignUp(user)
-
 		if err != nil {
 			fmt.Println(err)
 			c.HTML(http.StatusBadRequest, "otp.html", gin.H{

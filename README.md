@@ -1,6 +1,10 @@
 # Unicorn Project
 
-Unicorn Project is an open source Cloud Learning initiative. If you are one of these, you're in the right place:
+Unicorn Project is an **open source Cloud Learning Plarform**. If you want to improve your skill in Cloud, Serverless, Web development in Cloud (frontend and backend) - **you're in the right place**! Keep reading.
+
+## Unicorn Project Mission: Make you a Cloud Ninja
+
+Cloud Ninja may mean Cloud Developer, Cloud Engineer or a Cloud Architect. Think about what YOU want it to mean. If you are one of the following, you definitely belong here:
 
 - Developer, who wants to go deeper to Cloud and DevOps.
 - SysAdmin, who wants to go deeper to Cloud and DevOps.
@@ -8,9 +12,9 @@ Unicorn Project is an open source Cloud Learning initiative. If you are one of t
 
 Regardless if you're an absolute beginner, or an experienced professional - we promisse you that you'll learn a bunch.
 
-Unicorn Project has a single objective: to **help you become a Cloud Ninja, or improve your Ninja Skills**. Cloud Ninja may mean Cloud Developer, Cloud Engineer or a Cloud Architect.
+## Unicorn Project Rules
 
-If you want to improve your skill in Cloud, Serverless, Web development in Cloud (frontend and backend) - **you're in the right place**! Keep reading.
+There is only 1 rule: **our main objective is for you to learn. If you write code, it's not enough to just find the best solution to a problem. Make sure to explain why you did it that way, because like you learn from others - the others will learn from you.**
 
 ## Unicorn Project = Unicorn Pursuit + Unicorn Workshop
 
@@ -26,7 +30,7 @@ The beauty of Unicorn Project is that it allows you to choose the part of techno
 - **AWS Serverless** (Lambda, Cognito, DynamoDB, Gargate etc.).
 - All AWS resources provisioned using **AWS CDK (Cloud Development Kit) - Python**.
 - **Go (golang)**.
-- **Gin Gonic** framework for Go.
+- **Gin** sweb development framework for Go.
 
 For more details about [Unicorn Pursuit Architecture, click here](https://www.matscloud.com/docs/unicorn-project/architecture/).
 
