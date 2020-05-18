@@ -78,9 +78,7 @@ You can find all the requirements, and how to build your Dev environment [here](
 
 ## What will I learn?
 
-{{% pageinfo %}}
 True beauty of this workshop is that it's designed so that **you choose the technologies you want to focus on, there is no need to follow the proposed oreder**. The Unicorn App is ready and deployable, so just choose your tech. Hopefully you'll end up contributing.
-{{% /pageinfo %}}
 
 ||||
 |-------------------|-----------------|------|
