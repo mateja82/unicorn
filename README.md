@@ -76,7 +76,7 @@ You can find all the information about Unicorn Pursuit and Unicorn Workshop [on 
 
 You can find all the requirements, and how to build your Dev environment [here](https://www.matscloud.com/docs/dev-environment/). Based on the technology that interests you most, you may not need to install the entire set of tools.
 
-## What will I learn?
+## Workshop Agenda
 
 True beauty of this workshop is that it's designed so that **you choose the technologies you want to focus on, there is no need to follow the proposed oreder**. The Unicorn App is ready and deployable, so just choose your tech. Hopefully you'll end up contributing.
 
@@ -103,9 +103,9 @@ True beauty of this workshop is that it's designed so that **you choose the tech
 |2.10|[API Gateway](https://www.matscloud.com/docs/cloud-infrastructure/api-gateway/)|API Gateway allows you to publish, maintain, monitor and secure your APIs. API Gateway basically exposes REST API HTTPS endpoints, and manages what each API endpoint “maps to” in the backend, what it triggers.|
 |2.11|[Messaging Services: SQS, SNS](https://www.matscloud.com/docs/cloud-infrastructure/sqs-sns/)|Messaging protocols can be very useful when you want to notify either users or other services of an event.|
 ||||
-||**SECTION 3**|**Let's dive into GO for Web Apps**|
+||**SECTION 3**|**Let's dive into Web Development in GO**|
 |3.1|[Start with Go basics](https://www.matscloud.com/docs/web-development/golang/)|Go is an open source programming language that makes it easy to build simple, reliable, and efficient software. We need to learn the basic constructs, such as packages, routes, templates etc.|
-|3.2|[Gin Web development framework for Go](http://localhost:1313/docs/web-development/gin-framework/)|Learn how to make Go Web development a bit more user-friendly and more performant using Gin framework.|
+|3.2|[Gin Web development framework for Go](https://www.matscloud.com/docs/web-development/gin-framework/)|Learn how to make Go Web development a bit more user-friendly and more performant using Gin framework.|
 |3.3|[Containerize Unicorn with Dockerfile](https://www.matscloud.com/docs/web-development/docker/)|How to containerize Golang Web App. Learn how to create a Dockerfile|
 |3.4|[Create Frontend with HTML, CSS, JS and React](https://www.matscloud.com/docs/web-development/html-css/)||
 |3.5|[Testing in Go](https://www.matscloud.com/docs/web-development/testing/)||
@@ -116,7 +116,7 @@ True beauty of this workshop is that it's designed so that **you choose the tech
 |4.3|[Configure storing static files in S3](https://www.matscloud.com/docs/cloud-sdk/go-and-s3/)|How to store and consume S3 objects from Golang. In Unicorn Pursuit, we'll store Project Images and Diagrams in an S3 Bucket.|
 |4.4|[Handle Unicorn Users with Cognito](https://www.matscloud.com/docs/cloud-sdk/go-and-cognito/)|We created the Cognito User Pool and App Client using AWS CDK. Now it’s time to create Login, Logout and Register page in Unicorn Pursuit, so our users can authenticate.|
 |4.5|[Unicorn Projects and Voting with DynamoDB](https://www.matscloud.com/docs/cloud-sdk/go-and-dynamodb/)||
-|4.6|[Build Unicorn container in Fargate]()|  How to containerize the Go application, and deploy it in ECS managed container orchestrator - Fargate.|
+|4.6|[Build Unicorn container in Fargate](https://www.matscloud.com/docs/cloud-sdk/docker-in-fargate/)|  How to containerize the Go application, and deploy it in ECS managed container orchestrator - Fargate.|
 |4.7|[Create required Lambdas](https://www.matscloud.com/docs/cloud-sdk/lambda/)|Lambda is always handy to implement the functions we don't have "out of the box". Let's use AWS SDK for Python, and fill the gaps.|
 ||||
 ||**SECTION 5**|**[Site Reliability Engineering (SRE)](https://www.matscloud.com/docs/sre/)**|
@@ -127,3 +127,6 @@ True beauty of this workshop is that it's designed so that **you choose the tech
 ||||
 ||**SECTION 7**|**[Get Certified](https://www.matscloud.com/docs/get-certified/)**|
 
+.
+
+**Next**: [Let's read Unicorn Pursuit App Requirements, and you understand the Web App we're building](https://www.matscloud.com/docs/unicorn-project/requirements/)

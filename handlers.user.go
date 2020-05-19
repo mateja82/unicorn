@@ -172,6 +172,8 @@ func OTP(ce CognitoExample) gin.HandlerFunc {
 				"ErrorTitle":   "OTP Failed",
 				"ErrorMessage": err.Error()})
 		} else {
+
+			// If OK, generate Token, set "is_logged_in" to True, and redirect to Login Success.
 			fmt.Println(result)
 			token := generateSessionToken()
 

@@ -12,13 +12,13 @@ import (
 
 var router *gin.Engine
 
-// CognitoExample holds internals for auth flow.
-type CognitoExample struct {
-	CognitoClient *cognito.CognitoIdentityProvider
-	RegFlow       *regFlow
-	UserPoolID    string
-	AppClientID   string
-}
+	// CognitoExample holds internals for auth flow.
+	type CognitoExample struct {
+		CognitoClient *cognito.CognitoIdentityProvider
+		RegFlow       *regFlow
+		UserPoolID    string
+		AppClientID   string
+	}
 
 type regFlow struct {
 	Username string
