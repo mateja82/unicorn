@@ -76,6 +76,21 @@ You can find all the information about Unicorn Pursuit and Unicorn Workshop [on 
 
 You can find all the requirements, and how to build your Dev environment [here](https://www.matscloud.com/docs/dev-environment/). Based on the technology that interests you most, you may not need to install the entire set of tools.
 
+## I want to contribute, what do I do?
+
+Glad you asked! First, fork a project, and make sure to create your branch. Try naming it as the feature you're working on.
+
+Now, about what feature to work on...
+
+There are 2 CANBAN boards associated with the Unicorn Git repository. You can visit the **Backlog** column, and either choose a ticket, move it to "In Progress" and start working on it, or you can propose an improvement by adding a ticket to the "Backlog".
+
+If it's an **issue** or an improvement of an existing functionality, create an Issue, be sure to associate it with the correct Project, and it will automatically be added to **To Do** column.
+
+The two projects are:
+
+- **AWS Infrastructure**: [where we use AWS CDK for managing AWS resources via Python](https://github.com/mateja82/unicorn/projects/2)
+- **Unicorn Pursuit Web App**: [which is our web app, done in Golang, React and AWS SDK](https://github.com/mateja82/unicorn/projects/1)
+
 ## Workshop Agenda
 
 True beauty of this workshop is that it's designed so that **you choose the technologies you want to focus on, there is no need to follow the proposed oreder**. The Unicorn App is ready and deployable, so just choose your tech. Hopefully you'll end up contributing.
@@ -127,6 +142,8 @@ True beauty of this workshop is that it's designed so that **you choose the tech
 ||||
 ||**SECTION 7**|**[Get Certified](https://www.matscloud.com/docs/get-certified/)**|
 
-.
+## What now?
 
-**Next**: [Let's read Unicorn Pursuit App Requirements, and you understand the Web App we're building](https://www.matscloud.com/docs/unicorn-project/requirements/)
+**What do I do next?**: [Continue to Mat's Cloud and the read Unicorn Pursuit App Requirements, to understand what we're building](https://www.matscloud.com/docs/unicorn-project/requirements/)
+
+You will find further instructions there.
