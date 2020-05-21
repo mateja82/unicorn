@@ -3,14 +3,12 @@
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
 
-<img src="https://s3-prod-unicorn.s3-eu-west-1.amazonaws.com/unicorn+description.png" alt="Unicorn Description" style="width:700px;height:450px;">
-
   <!--Loop over the `payload` variable, which is the list of projects-->
   {{range .payload }}
     <!--Create the link for the project based on its ID-->
     <a href="/project/view/{{.ID}}">
       <!--Display the title of the project -->
-      <h2>Idea: {{.Title}}</h2>
+      <h2>Project: {{.Title}}</h2>
     </a>
     <!--Display the content of the project-->
     <p>Description: {{.Content}}</p>

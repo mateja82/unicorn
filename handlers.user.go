@@ -195,9 +195,3 @@ func showAboutPage(c *gin.Context) {
 	render(c, gin.H{
 		"title": "About"}, "about.html")
 }
-
-func showLeaderboardPage(c *gin.Context) {
-	// Call the render function with the name of the template to render
-	render(c, gin.H{
-		"title": "Leaderboard"}, "leaderboard.html")
-}

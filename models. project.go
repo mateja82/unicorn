@@ -4,31 +4,17 @@ package main
 
 import "errors"
 
-type project struct {
-	// Owner needs to be added, as an automatically registeted email address.
-	ID    int    `json:"id"`
-	Title string `json:"title"`
-	//	Owner   string `json:"owner"`
-	Content string `json:"content"`
-	Photo   string `json:"photo"`
-	Votes   int    `json:"votes"`
-}
-
-// For this demo, we're storing the project list in memory
-// In a real application, this list will most likely be fetched
-// from a database or from static files
-var projectList = []project{
-	project{ID: 1, Title: "Flying Gas Stations", Content: "We can build them in the air... sky is the limit!", Photo: "none", Votes: 0},
-	project{ID: 2, Title: "Corporate Gym Spinning Class creating energy", Content: "Just imagine the potential...", Photo: "none", Votes: 0},
+// To avoid scanning DynamoDB each time we need to show project info, we'll load all to memory into an array of projects called projectList
+var projectList = []ProjectExample{
 }
 
 // Return a list of all the projects
-func getAllProjects() []project {
+func getAllProjects() []ProjectExample {
 	return projectList
 }
 
 // Fetch an project based on the ID supplied
-func getProjectByID(id int) (*project, error) {
+func getProjectByID(id int) (*ProjectExample, error) {
 	for _, a := range projectList {
 		if a.ID == id {
 			return &a, nil
@@ -37,10 +23,10 @@ func getProjectByID(id int) (*project, error) {
 	return nil, errors.New("Project not found")
 }
 
-// Create a new project with the title and content provided
-func createNewProject(title, content, photo string) (*project, error) {
+// Load a new project with the title and content provided
+func loadNewProject(id int, title string, owner string, content string, photo string, votes int) (*ProjectExample, error) {
 	// Set the ID of a new project to one more than the number of projects
-	a := project{ID: len(projectList) + 1, Title: title, Content: content, Photo: photo, Votes: 0}
+	a := ProjectExample{ID: id, Title: title, Content: content, Photo: photo, Votes: votes}
 
 	// Add the project to the list of projects
 	projectList = append(projectList, a)

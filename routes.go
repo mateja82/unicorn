@@ -10,6 +10,9 @@ import (
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
+
+
 )
 
 func initializeRoutes() {
@@ -17,9 +20,6 @@ func initializeRoutes() {
 	// Use the setUserStatus middleware for every route to set a flag
 	// indicating whether the request was from an authenticated user or not
 	router.Use(setUserStatus())
-
-	// Handle the index route
-	router.GET("/", showIndexPage)
 
 	// Create AWS Session
 	conf := &aws.Config{Region: aws.String("eu-west-1")}
@@ -49,6 +49,15 @@ func initializeRoutes() {
 		UserPoolID:    "CognitoUnicornUserPool",
 		AppClientID:   ClientIDValue,
 	}
+
+	// Create DynamoDB Service Session and reference the Unicorn Projects Table
+	ddbsvc := dynamodb.New(sess)
+
+	// load info from DynamoDB to Projects array in Memory
+	loadProjectsDynamoDB(ddbsvc)
+
+	// Handle the index route
+	router.GET("/", showIndexPage)
 
 	//Group Global routes (About, Leaderboard)
 	globalRoutes := router.Group("/g")
@@ -100,6 +109,7 @@ func initializeRoutes() {
 	projectRoutes := router.Group("/project")
 	{
 		// Handle GET requests at /project/view/some_project_id
+		// This is where VOTING needs to happen
 		projectRoutes.GET("/view/:project_id", getProject)
 
 		// Handle the GET requests at /project/create
@@ -109,6 +119,6 @@ func initializeRoutes() {
 
 		// Handle POST requests at /project/create
 		// Ensure that the user is logged in by using the middleware
-		projectRoutes.POST("/create", ensureLoggedIn(), createProject)
+		projectRoutes.POST("/create", ensureLoggedIn(), createProject(ddbsvc))
 	}
 }

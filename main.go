@@ -12,17 +12,29 @@ import (
 
 var router *gin.Engine
 
-	// CognitoExample holds internals for auth flow.
-	type CognitoExample struct {
-		CognitoClient *cognito.CognitoIdentityProvider
-		RegFlow       *regFlow
-		UserPoolID    string
-		AppClientID   string
+// CognitoExample holds internals for auth flow.
+type CognitoExample struct {
+	CognitoClient *cognito.CognitoIdentityProvider
+	RegFlow       *regFlow
+	UserPoolID    string
+	AppClientID   string
 	}
 
 type regFlow struct {
 	Username string
-}
+	}
+
+type ProjectExample struct {
+	// Owner needs to be added, as an automatically registeted email address.
+	ID    int    `json:"id"`
+	Title string `json:"title"`
+	//	Owner is owners email address   string `json:"owner"`
+	Owner string `json:"owner"`
+	Content string `json:"content"`
+	// Photo is a string with S3 URL
+	Photo   string `json:"photo"`
+	Votes   int    `json:"votes"`
+	}
 
 func main() {
 	// Set Gin to production mode

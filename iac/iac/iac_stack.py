@@ -34,10 +34,6 @@ class IacStack(core.Stack):
             attribute_definitions=[
                 ddb.CfnTable.AttributeDefinitionProperty(attribute_name="id",attribute_type="N"),
                 ddb.CfnTable.AttributeDefinitionProperty(attribute_name="owner",attribute_type="S"),
-#               ddb.CfnTable.AttributeDefinitionProperty(attribute_name="title",attribute_type="S"),
-#               ddb.CfnTable.AttributeDefinitionProperty(attribute_name="content",attribute_type="S"),
-#               ddb.CfnTable.AttributeDefinitionProperty(attribute_name="photo",attribute_type="S"),
-#               ddb.CfnTable.AttributeDefinitionProperty(attribute_name="votes",attribute_type="N"),
             ],
             provisioned_throughput=ddb.CfnTable.ProvisionedThroughputProperty(
                 read_capacity_units=5,
