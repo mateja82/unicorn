@@ -15,6 +15,8 @@ import (
 
 )
 
+var sess *session.Session
+
 func initializeRoutes() {
 
 	// Use the setUserStatus middleware for every route to set a flag
@@ -119,6 +121,6 @@ func initializeRoutes() {
 
 		// Handle POST requests at /project/create
 		// Ensure that the user is logged in by using the middleware
-		projectRoutes.POST("/create", ensureLoggedIn(), createProject(ddbsvc))
+		projectRoutes.POST("/create", ensureLoggedIn(), createProject(ddbsvc, sess))
 	}
 }

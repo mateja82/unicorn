@@ -7,19 +7,25 @@ import (
 	"strconv"
 	"fmt"
 	"os"
-
+	//"io"
+	
 	"github.com/gin-gonic/gin"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+
 
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/expression"
-    "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	
+	//"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
 //from AWS CDK, set variables for DynamoDB Table and S3 bucket all the Project handling functions will use
 var tableName = "UnicornDynamoDBVoting"
-var s3Bucket = "www.unicornpursuit.com"
+var bucket = "www.unicornpursuit.com"
 var CurrentProjectNumber int
 
 func loadProjectsDynamoDB(ddbsvc *dynamodb.DynamoDB) {
@@ -117,7 +123,7 @@ func showLeaderboardPage(c *gin.Context) {
 
 
 
-func createProject(ddbsvc *dynamodb.DynamoDB) gin.HandlerFunc {
+func createProject(ddbsvc *dynamodb.DynamoDB, sess *session.Session) gin.HandlerFunc {
 	fn := func(c *gin.Context) {
 
 		// Set the next project ID
@@ -130,9 +136,37 @@ func createProject(ddbsvc *dynamodb.DynamoDB) gin.HandlerFunc {
 		// Get owner as an email of the logged in user
 		owner := c.PostForm("owner")
 		content := c.PostForm("content")
+		
+		fileHeader, err := c.FormFile("file")
+  		if err != nil {
+			c.String(http.StatusBadRequest, fmt.Sprintf("file err : %s", err.Error()))
+    	return
+		} else {
+			fmt.Println(fileHeader.Filename)
+		}
+		  
+		f, err := fileHeader.Open()
+		if err != nil {
+    		c.String(http.StatusBadRequest, fmt.Sprintf("file opening err : %s", err.Error()))
+    	return
+		}
 
-		// Call a function that saves the photo in S3, and returns URL
-		photo := c.PostForm("photo")
+		uploader := s3manager.NewUploader(sess)
+
+		result, err := uploader.Upload(&s3manager.UploadInput{
+			Bucket: aws.String(bucket),
+			Key: aws.String(fileHeader.Filename),
+			Body: f,
+		})
+		if err != nil {
+			fmt.Println(err)
+			c.HTML(http.StatusBadRequest, "create-project.html", gin.H{
+				"ErrorTitle":   "S3 Upload Failed",
+				"ErrorMessage": err.Error()})
+		} else {
+			// Success, store project in DynamoDB and redirect to OK
+			fmt.Println("Successfully uploaded to", result.Location)
+		}
 
 		// create a DynamoDB Item
 		project := ProjectExample{
@@ -140,7 +174,7 @@ func createProject(ddbsvc *dynamodb.DynamoDB) gin.HandlerFunc {
 			Title: title,
 			Owner: owner,
 			Content: content,
-			Photo: photo,
+			Photo: result.Location,
 			// Set Votes to 0, as it's a new project
 			Votes: 0,
 		}
