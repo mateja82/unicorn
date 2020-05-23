@@ -2,15 +2,40 @@
 
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
-
+<!--Vote for this project-->
+<!DOCTYPE html>
+<html>
+<body>
 <!--Display the title of the project-->
 <h1>{{.payload.Title}}</h1>
 
 <!--Display the photo of the project-->
-<p>{{.payload.Photo}}</p>
+<p>Project proposed by: {{.payload.Owner}}</p>
 
+<!--Display the photo of the project-->
+<img src={{.payload.Photo}} alt="Project Photo" style="width:500px;height:300px;">
+<br>
 <!--Display the content of the project-->
-<p>{{.payload.Content}}</p>
+<br>
+<p>Project Description:{{.payload.Content}}</p>
+  <br>
+<h3>Would you like to vote for this project?</h3>
+<br>
+<p>Choose the number of points you want to give</p>
+<br>
+<form method="post" action="/project/view/{{.payload.ID}}">
+  <label for="votes">Number if points:</label>
+  <select id="votes" name="votes">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+  </select>
+  <input type="submit">
+</form>
+</body>
+</html>
 
 <!--Embed the footer.html template at this location-->
 {{ template "footer.html" .}}

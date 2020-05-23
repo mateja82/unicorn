@@ -112,7 +112,11 @@ func initializeRoutes() {
 	{
 		// Handle GET requests at /project/view/some_project_id
 		// This is where VOTING needs to happen
-		projectRoutes.GET("/view/:project_id", getProject)
+		projectRoutes.GET("/view/:project_id", ensureLoggedIn(), getProject)
+
+		// Handle POST requests at /project/view/some_project_id
+		// Ensure that the user is logged in by using the middleware
+		projectRoutes.POST("/view/:project_id", ensureLoggedIn(), voteForProject(ddbsvc))
 
 		// Handle the GET requests at /project/create
 		// Show the project creation page
@@ -122,5 +126,6 @@ func initializeRoutes() {
 		// Handle POST requests at /project/create
 		// Ensure that the user is logged in by using the middleware
 		projectRoutes.POST("/create", ensureLoggedIn(), createProject(ddbsvc, sess))
+
 	}
 }

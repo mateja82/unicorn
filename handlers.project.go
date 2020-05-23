@@ -7,8 +7,7 @@ import (
 	"strconv"
 	"fmt"
 	"os"
-	//"io"
-	
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -55,7 +54,7 @@ func loadProjectsDynamoDB(ddbsvc *dynamodb.DynamoDB) {
 			os.Exit(1)
 		} else {
 			// Unmarshall and sort the results	
-			numItems := 0
+			numItems := 1
 			for _, i := range result.Items {
 				item := ProjectExample{}
 
@@ -114,13 +113,77 @@ func getProject(c *gin.Context) {
 	}
 }
 
+func voteForProject(ddbsvc *dynamodb.DynamoDB) gin.HandlerFunc {
+	fn := func(c *gin.Context) {
+	votes := c.PostForm("votes")
+	fmt.Println(votes)
+	if projectID, err := strconv.Atoi(c.Param("project_id")); err == nil {
+		// Check if the project exists
+		if project, err := getProjectByID(projectID); err == nil {
+
+			// Update Votes in DynamoDB
+			ID := strconv.Itoa(project.ID)
+			Owner := project.Owner
+			fmt.Println(ID)
+			fmt.Println(Owner)
+
+			input := &dynamodb.UpdateItemInput{
+				ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+					":r": {
+						N: aws.String(votes),
+					},
+				},
+				TableName: aws.String(tableName),
+				Key: map[string]*dynamodb.AttributeValue{
+					"id": {
+						N: aws.String(ID),
+					},
+					"owner": {
+						S: aws.String(Owner),
+					},
+					
+				},
+				ReturnValues:     aws.String("UPDATED_NEW"),
+				UpdateExpression: aws.String("set votes = votes + :r"),
+			}
+
+			_, err := ddbsvc.UpdateItem(input)
+			if err != nil {
+				fmt.Println(err.Error())
+				return
+			}
+
+			// Dont forget to Scan DynamoDB into a local memory again
+			
+			projectList = nil
+			loadProjectsDynamoDB(ddbsvc)
+
+			// get project again, to be sure Vote value is updated
+			project, err := getProjectByID(projectID)
+
+			// Call the render function with the info
+			render(c, gin.H{
+				"title":   "You've voted",
+				"payload": project}, "voting-successful.html")
+
+		} else {
+			// If the project is not found, abort with an error
+			c.AbortWithError(http.StatusNotFound, err)
+		}
+
+	} else {
+		// If an invalid project ID is specified in the URL, abort with an error
+		c.AbortWithStatus(http.StatusNotFound)
+	}
+	}
+	return gin.HandlerFunc(fn)
+}
 
 func showLeaderboardPage(c *gin.Context) {
 	// Call the render function with the name of the template to render
 	render(c, gin.H{
 		"title": "Leaderboard"}, "leaderboard.html")
 }
-
 
 
 func createProject(ddbsvc *dynamodb.DynamoDB, sess *session.Session) gin.HandlerFunc {
