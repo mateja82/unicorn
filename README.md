@@ -91,6 +91,44 @@ The two projects are:
 - **AWS Infrastructure**: [where we use AWS CDK for managing AWS resources via Python](https://github.com/mateja82/unicorn/projects/2)
 - **Unicorn Pursuit Web App**: [which is our web app, done in Golang, React and AWS SDK](https://github.com/mateja82/unicorn/projects/1)
 
+## How do I run Unicorn Pursuit in my environment?
+
+You need to set up:
+
+- AWS CLI v2 (make sure you run `aws condifure` and configure the authentication, and the desired AWS Region)
+- AWS CDK
+- Go, with the correct GOPATH and GOROOT
+
+You can follow [the guide on how to set up a dev environment here](https://www.matscloud.com/docs/dev-environment/), or set the above yourself.
+
+Clone/Fork this repo to `$HOME/go/src/`, and first deploy the AWS infrastructure. Before you deploy everything with AWS CDK, be sure you've deployed the initial CDK CloudFormation Stack, and go to `iac` folder to check out if CDK "works":
+
+```
+cd $HOME/go/src/unicorn/iac
+cdk ls
+UnicornIaC
+```
+
+If your CDK isn't working, [make sure all dependencies found here are correctly deployed](https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html), and come back.
+
+Once you're sure CDK works, go for deployment:
+```
+cdk deploy
+```
+
+This will deploy everything: S3 Bucket, DynamoDB Table, Cognito User Pool. The only thing you need to do "manually", is configure the Cognito Application Cliend in SSM Parameter Store, because it's confidential, and you shouldn't dispose it in your code. You can [find how to do that here](https://www.matscloud.com/docs/cloud-sdk/ssm-for-credentials/), it's pretty simple.
+
+Once you're done with that, Unicorn Pursuit should run smoothly:
+
+```
+cd $HOME/go/src/unicorn
+go run unicorn
+```
+You should be able to access your App from your browser, port 8080: `http://localhost:8080`.
+
+Don't forget that you first need to create a user. Your phone number will be verified, and you can go on and create a few Projects.
+
+
 ## Workshop Agenda
 
 True beauty of this workshop is that it's designed so that **you choose the technologies you want to focus on, there is no need to follow the proposed oreder**. The Unicorn App is ready and deployable, so just choose your tech. Hopefully you'll end up contributing.
