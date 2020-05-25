@@ -18,7 +18,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/expression"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	
-	//"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
@@ -121,12 +120,12 @@ func voteForProject(ddbsvc *dynamodb.DynamoDB) gin.HandlerFunc {
 		// Check if the project exists
 		if project, err := getProjectByID(projectID); err == nil {
 
-			// Update Votes in DynamoDB
+			// Convert ID to String, required to pass it using UpdateItem function
+			// We need ID and Owner as Primary Key to identify an Item we want to update
 			ID := strconv.Itoa(project.ID)
 			Owner := project.Owner
-			fmt.Println(ID)
-			fmt.Println(Owner)
 
+			// "r" is the Votes value user wants to be added to a project
 			input := &dynamodb.UpdateItemInput{
 				ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
 					":r": {
@@ -144,13 +143,15 @@ func voteForProject(ddbsvc *dynamodb.DynamoDB) gin.HandlerFunc {
 					
 				},
 				ReturnValues:     aws.String("UPDATED_NEW"),
+				// Using UpdateExpression, we will add the "votes" to the current value of the field (current number of votes)
 				UpdateExpression: aws.String("set votes = votes + :r"),
 			}
 
 			_, err := ddbsvc.UpdateItem(input)
 			if err != nil {
-				fmt.Println(err.Error())
-				return
+				c.HTML(http.StatusBadRequest, "project.html", gin.H{
+					"ErrorTitle":   "Error updating Votes",
+					"ErrorMessage": err.Error()})
 			}
 
 			// Dont forget to Scan DynamoDB into a local memory again
@@ -161,7 +162,7 @@ func voteForProject(ddbsvc *dynamodb.DynamoDB) gin.HandlerFunc {
 			// get project again, to be sure Vote value is updated
 			project, err := getProjectByID(projectID)
 
-			// Call the render function with the info
+			// Redirect to Voting SUccessful
 			render(c, gin.H{
 				"title":   "You've voted",
 				"payload": project}, "voting-successful.html")
@@ -180,17 +181,22 @@ func voteForProject(ddbsvc *dynamodb.DynamoDB) gin.HandlerFunc {
 }
 
 func showLeaderboardPage(c *gin.Context) {
-	// Call the render function with the name of the template to render
-	render(c, gin.H{
-		"title": "Leaderboard"}, "leaderboard.html")
-}
 
+	// Get the sorted list of projects, starting with currently highest voted
+		projects := getSortedProjects()
+
+		// Call the render function with the name of the template to render
+		render(c, gin.H{
+			"title":   "Home Page",
+			"payload": projects}, "leaderboard.html")
+}
 
 func createProject(ddbsvc *dynamodb.DynamoDB, sess *session.Session) gin.HandlerFunc {
 	fn := func(c *gin.Context) {
 
 		// Set the next project ID
 		id := CurrentProjectNumber
+		fmt.Println("Creating project with ID:")
 		fmt.Println(id)
 
 		// Obtain the POSTed project values
@@ -202,7 +208,9 @@ func createProject(ddbsvc *dynamodb.DynamoDB, sess *session.Session) gin.Handler
 		
 		fileHeader, err := c.FormFile("file")
   		if err != nil {
-			c.String(http.StatusBadRequest, fmt.Sprintf("file err : %s", err.Error()))
+			c.HTML(http.StatusBadRequest, "create-project.html", gin.H{
+				"ErrorTitle":   "File Formation error",
+				"ErrorMessage": err.Error()})
     	return
 		} else {
 			fmt.Println(fileHeader.Filename)
@@ -210,28 +218,34 @@ func createProject(ddbsvc *dynamodb.DynamoDB, sess *session.Session) gin.Handler
 		  
 		f, err := fileHeader.Open()
 		if err != nil {
-    		c.String(http.StatusBadRequest, fmt.Sprintf("file opening err : %s", err.Error()))
+			c.HTML(http.StatusBadRequest, "create-project.html", gin.H{
+				"ErrorTitle":   "File Opening error",
+				"ErrorMessage": err.Error()})
     	return
 		}
 
+		// Create an S3 Uploader
 		uploader := s3manager.NewUploader(sess)
 
+		// Upload 
 		result, err := uploader.Upload(&s3manager.UploadInput{
 			Bucket: aws.String(bucket),
 			Key: aws.String(fileHeader.Filename),
 			Body: f,
 		})
 		if err != nil {
-			fmt.Println(err)
 			c.HTML(http.StatusBadRequest, "create-project.html", gin.H{
 				"ErrorTitle":   "S3 Upload Failed",
 				"ErrorMessage": err.Error()})
 		} else {
-			// Success, store project in DynamoDB and redirect to OK
+			// Success, print URL to Console
 			fmt.Println("Successfully uploaded to", result.Location)
 		}
 
-		// create a DynamoDB Item
+		// create a DynamoDB Item. Most information is retrieved from HTML "create-project.html"
+		// Owner is the email address of the logged in user [to be implemented].
+		// result.Location is a return URL value of S3 Photo Upload function.
+		// Votes = 0, because we want all new projects to start with 0 votes.
 		project := ProjectExample{
 			ID: id,
 			Title: title,
@@ -244,11 +258,10 @@ func createProject(ddbsvc *dynamodb.DynamoDB, sess *session.Session) gin.Handler
 
 		// Marshall new project into a map of AttributeValue objects.
 		av, err := dynamodbattribute.MarshalMap(project)
-
 		if err != nil {
-			fmt.Println("Got error marshalling new project item:")
-			fmt.Println(err.Error())
-			os.Exit(1)
+			c.HTML(http.StatusBadRequest, "create-project.html", gin.H{
+				"ErrorTitle":   "Error Marshalling a new projects",
+				"ErrorMessage": err.Error()})
 		}
 
 		input := &dynamodb.PutItemInput{
@@ -258,7 +271,6 @@ func createProject(ddbsvc *dynamodb.DynamoDB, sess *session.Session) gin.Handler
 
   		// attempt PutItem with the created project object
 		_, err = ddbsvc.PutItem(input)
-
 		if err != nil {
 			fmt.Println(err)
 			c.HTML(http.StatusBadRequest, "create-project.html", gin.H{

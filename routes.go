@@ -52,7 +52,7 @@ func initializeRoutes() {
 		AppClientID:   ClientIDValue,
 	}
 
-	// Create DynamoDB Service Session and reference the Unicorn Projects Table
+	// Create DynamoDB Service Session and reference the session
 	ddbsvc := dynamodb.New(sess)
 
 	// load info from DynamoDB to Projects array in Memory

@@ -25,10 +25,9 @@ type regFlow struct {
 	}
 
 type ProjectExample struct {
-	// Owner needs to be added, as an automatically registeted email address.
 	ID    int    `json:"id"`
 	Title string `json:"title"`
-	//	Owner is owners email address   string `json:"owner"`
+	//	Owner is owners email address
 	Owner string `json:"owner"`
 	Content string `json:"content"`
 	// Photo is a string with S3 URL

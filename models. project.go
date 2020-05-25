@@ -4,9 +4,10 @@ package main
 
 import (
 	"errors"
+	"sort"
 )
 
-// To avoid scanning DynamoDB each time we need to show project info, we'll load all to memory into an array of projects called projectList
+// To avoid scanning DynamoDB each time we need to show project info, we'll load all to memory into Slice of projects called projectList
 var projectList = []ProjectExample{
 }
 
@@ -14,6 +15,20 @@ var projectList = []ProjectExample{
 func getAllProjects() []ProjectExample {
 	return projectList
 }
+
+// Return a list of all the projects, sorted by current number of Votes
+func getSortedProjects() []ProjectExample {
+
+	// Create a new list which will have the correct order
+	sortedList := projectList
+
+	// use "sort" package for sorting Slices
+	sort.SliceStable(sortedList, func(i, j int) bool {
+		return sortedList[i].Votes > sortedList[j].Votes
+	})
+	return sortedList
+}
+
 
 // Fetch an project based on the ID supplied
 func getProjectByID(id int) (*ProjectExample, error) {

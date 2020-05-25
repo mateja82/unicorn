@@ -2,8 +2,16 @@
 
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
-
-<p>{{.title}}</p>
-
+  <!--Loop over the `payload` variable, which is the list of projects-->
+  {{range .payload }}
+    <!--Create the link for the project based on its ID-->
+    <a href="/project/view/{{.ID}}">
+      <!--Display the title of the project -->
+      <h2>{{.Title}}</h2>
+    </a>
+    <!--Display the content of the project-->
+    <p>Proposed by: {{.Owner}}</p>
+    <p>Number of Votes: {{.Votes}}</p>
+  {{end}}
 <!--Embed the footer.html template at this location-->
 {{ template "footer.html" .}}

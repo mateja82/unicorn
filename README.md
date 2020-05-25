@@ -95,7 +95,7 @@ The two projects are:
 
 You need to set up:
 
-- AWS CLI v2 (make sure you run `aws condifure` and configure the authentication, and the desired AWS Region)
+- AWS CLI v2 (make sure you run `aws configure` and configure the authentication, and the desired AWS Region)
 - AWS CDK
 - Go, with the correct GOPATH and GOROOT
 
@@ -111,7 +111,7 @@ UnicornIaC
 
 If your CDK isn't working, [make sure all dependencies found here are correctly deployed](https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html), and come back.
 
-Once you're sure CDK works, go for deployment:
+Once CDK works, go for deployment:
 ```
 cdk deploy
 ```
@@ -127,7 +127,6 @@ go run unicorn
 You should be able to access your App from your browser, port 8080: `http://localhost:8080`.
 
 Don't forget that you first need to create a user. Your phone number will be verified, and you can go on and create a few Projects.
-
 
 ## Workshop Agenda
 
