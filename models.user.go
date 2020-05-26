@@ -18,11 +18,7 @@ type user struct {
 // from a database. Moreover, in production settings, you should
 // store passwords securely by salting and hashing them instead
 // of using them as we're doing in this demo
-var userList = []user{
-	user{Username: "user1", Password: "pass1"},
-	user{Username: "user2", Password: "pass2"},
-	user{Username: "user3", Password: "pass3"},
-}
+var userList = []user{}
 
 // Check if the username and password combination is valid
 func isUserValid(username, password string) bool {

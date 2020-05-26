@@ -18,22 +18,21 @@ type CognitoExample struct {
 	RegFlow       *regFlow
 	UserPoolID    string
 	AppClientID   string
-	}
+}
 
 type regFlow struct {
 	Username string
-	}
+}
 
+// ProjectExample is a Struct of a Project, including current Votes
 type ProjectExample struct {
-	ID    int    `json:"id"`
-	Title string `json:"title"`
-	//	Owner is owners email address
-	Owner string `json:"owner"`
-	Content string `json:"content"`
-	// Photo is a string with S3 URL
+	ID      int    `json:"id"`
+	Title   string `json:"title" validate:"required"`
+	Owner   string `json:"owner" validate:"required,email"`
+	Content string `json:"content" validate:"required"`
 	Photo   string `json:"photo"`
 	Votes   int    `json:"votes"`
-	}
+}
 
 func main() {
 	// Set Gin to production mode
