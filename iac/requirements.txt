@@ -133,7 +133,7 @@ systemd-python==234
 texttable==1.6.2
 toml==0.10.0
 ttystatus==0.38
-Twisted==18.9.0
+Twisted>=20.3.0
 typed-ast==1.4.1
 typing-extensions==3.7.4.2
 ubuntu-advantage-tools==20.3
