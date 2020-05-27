@@ -56,7 +56,6 @@ class IacStack(core.Stack):
             )
         )
 
-
         # Cognito: Create User Pool
         userpool = cognito.UserPool(
             self, "CognitoUnicornUserPool",
