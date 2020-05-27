@@ -24,6 +24,12 @@
       }
     </style>
   </head>
+      <!--If there's an error, display the error-->
+      {{ if .ErrorTitle}}
+      <p class="bg-danger">
+        {{.ErrorTitle}}: {{.ErrorMessage}}
+      </p>
+      {{end}}
   <body class="holder">
     <div class="ui raised text container">
       <div class="column">

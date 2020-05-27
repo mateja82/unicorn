@@ -11,7 +11,10 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/aws/aws-sdk-go/aws"
+
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+
+	"github.com/go-playground/validator"
 )
 
 const flowUsernamePassword = "USER_PASSWORD_AUTH"
@@ -80,8 +83,6 @@ func generateSessionToken() string {
 
 func logout(c *gin.Context) {
 
-	// var sameSiteCookie http.SameSite
-
 	// Clear the cookie
 	c.SetCookie("token", "", -1, "", "", false, true)
 
@@ -105,39 +106,64 @@ func register(ce CognitoExample) gin.HandlerFunc {
 		emailAddress := c.PostForm("email")
 		phoneNumber := c.PostForm("phone_number")
 
-		// create a Cognito user object
-		user := &cognito.SignUpInput{
-			Username: aws.String(username),
-			Password: aws.String(password),
-			ClientId: aws.String(ce.AppClientID),
-			UserAttributes: []*cognito.AttributeType{
-				{
-					Name:  aws.String("email"),
-					Value: aws.String(emailAddress),
-				},
-				{
-					Name:  aws.String("name"),
-					Value: aws.String(fullname),
-				},
-				{
-					Name:  aws.String("phone_number"),
-					Value: aws.String(phoneNumber),
-				},
-			},
-		}
-  		// attempt SignUp with the created user object
-		_, err := ce.CognitoClient.SignUp(user)
-		if err != nil {
-			fmt.Println(err)
-			c.HTML(http.StatusBadRequest, "register.html", gin.H{
-				"ErrorTitle":   "Registration Failed",
-				"ErrorMessage": err.Error()})
-		} else {
-			// is Success, store username in the regFlow and redirect to OTP
-			ce.RegFlow.Username = username
-			render(c, gin.H{
-				"title": "Redirected to One Time Password"}, "otp.html")
+		// Verify username (email) and Password
+		validate := validator.New()
 
+		userErr := validate.Var(username, "required,email")
+
+		if userErr != nil {
+			fmt.Println(userErr.Error())
+
+			c.HTML(http.StatusBadRequest, "register.html", gin.H{
+				"ErrorTitle":   "e-mail format is not valid. DevDetails: ",
+				"ErrorMessage": userErr.Error()})
+		} else {
+
+			passErr := validate.Var(password, "required,min=8")
+
+			if passErr != nil {
+				fmt.Println(passErr.Error())
+
+				c.HTML(http.StatusBadRequest, "register.html", gin.H{
+					"ErrorTitle":   "Password doesn't meet security requirements. DevDetails: ",
+					"ErrorMessage": passErr.Error()})
+			} else {
+
+				// create a Cognito user object
+				user := &cognito.SignUpInput{
+					Username: aws.String(username),
+					Password: aws.String(password),
+					ClientId: aws.String(ce.AppClientID),
+					UserAttributes: []*cognito.AttributeType{
+						{
+							Name:  aws.String("email"),
+							Value: aws.String(emailAddress),
+						},
+						{
+							Name:  aws.String("name"),
+							Value: aws.String(fullname),
+						},
+						{
+							Name:  aws.String("phone_number"),
+							Value: aws.String(phoneNumber),
+						},
+					},
+				}
+				// attempt SignUp with the created user object
+				_, err := ce.CognitoClient.SignUp(user)
+				if err != nil {
+					fmt.Println(err)
+					c.HTML(http.StatusBadRequest, "register.html", gin.H{
+						"ErrorTitle":   "Registration Failed",
+						"ErrorMessage": err.Error()})
+				} else {
+					// is Success, store username in the regFlow and redirect to OTP
+					ce.RegFlow.Username = username
+					render(c, gin.H{
+						"title": "Redirected to One Time Password"}, "otp.html")
+
+				}
+			}
 		}
 
 	}
@@ -145,7 +171,6 @@ func register(ce CognitoExample) gin.HandlerFunc {
 }
 
 func showOTPPage(c *gin.Context) {
-	// Call the render function with the name of the template to render
 	render(c, gin.H{
 		"title": "OTP"}, "otp.html")
 }
@@ -164,7 +189,7 @@ func OTP(ce CognitoExample) gin.HandlerFunc {
 			ClientId:         aws.String(ce.AppClientID),
 		}
 
-  		// Confirm SignUp with Cognito Application Client
+		// Confirm SignUp with Cognito Application Client
 		result, err := ce.CognitoClient.ConfirmSignUp(user)
 		if err != nil {
 			fmt.Println(err)
@@ -189,9 +214,8 @@ func OTP(ce CognitoExample) gin.HandlerFunc {
 	return gin.HandlerFunc(fn)
 }
 
-// Global Pages are temporally here, cause I wasn't sure where to put them
+// "About" page is temporarily within Users section, should be moved to Global
 func showAboutPage(c *gin.Context) {
-	// Call the render function with the name of the template to render
 	render(c, gin.H{
 		"title": "About"}, "about.html")
 }

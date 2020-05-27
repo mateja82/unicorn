@@ -3,6 +3,7 @@ from aws_cdk import (
     aws_dynamodb as ddb,
     aws_cognito as cognito,
     aws_certificatemanager as acm,
+
     core
 
 )
@@ -43,6 +44,18 @@ class IacStack(core.Stack):
 
         # Grant RW writes for Unicorn App in Fargate and relevant Lambdas invoked from API Gateway
         # voting.grant_read_write_data(user)
+
+        # Second DynamoDB table called "users" for storing who voted for whom
+        # Example: user1@cepsa.com gave 5 points to project 323, 4 points to 111 etc.
+        users = ddb.Table(
+            self, "UnicornDynamoDBUsers",
+            table_name="UnicornDynamoDBUsers",
+            partition_key=ddb.Attribute(
+                name="owner",
+                type=ddb.AttributeType.STRING
+            )
+        )
+
 
         # Cognito: Create User Pool
         userpool = cognito.UserPool(
@@ -95,3 +108,4 @@ class IacStack(core.Stack):
                 user_srp=False
                 ),
         )
+
