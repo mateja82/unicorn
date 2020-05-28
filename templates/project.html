@@ -3,9 +3,17 @@
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
 <!--Vote for this project-->
+
+{{ if .ErrorTitle}}
+<p class="bg-danger">
+  {{.ErrorTitle}}: {{.ErrorMessage}}
+</p>
+{{end}}
 <!DOCTYPE html>
 <html>
 <body>
+
+
 <!--Display the title of the project-->
 <h1>{{.payload.Title}}</h1>
 
