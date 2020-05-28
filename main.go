@@ -24,7 +24,7 @@ type regFlow struct {
 	Username string
 }
 
-// ProjectExample is a Struct of a Project, including current Votes
+// ProjectExample is a Struct of a Project, including current Votes, , saved in a DynamoDB Votes
 type ProjectExample struct {
 	ID      int    `json:"id"`
 	Title   string `json:"title" validate:"required"`
@@ -32,6 +32,19 @@ type ProjectExample struct {
 	Content string `json:"content" validate:"required"`
 	Photo   string `json:"photo"`
 	Votes   int    `json:"votes"`
+}
+
+// loggedInUser will help us identify who is logged in, for when permissions and voting need checks
+var loggedInUserEmail string = "anonymous"
+
+// currentVotes represents the votes that the logged in used made, saved in a DynamoDB Users
+type currentVotes struct {
+	owner  string
+	voted1 int
+	voted2 int
+	voted3 int
+	voted4 int
+	voted5 int
 }
 
 func main() {

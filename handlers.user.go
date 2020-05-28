@@ -56,14 +56,20 @@ func performLogin(ce CognitoExample) gin.HandlerFunc {
 				"ErrorTitle":   "Login Failed",
 				"ErrorMessage": "Invalid credentials"})
 		} else {
-			fmt.Println(result)
+			//fmt.Println(result)
+			fmt.Println(result.AuthenticationResult.AccessToken)
 			// Set Token and ïs_logged_in Boolean, and jump to a different Menu
 			// NEXT STEP: Import TOKEN variable from Login
 
 			token := generateSessionToken()
+			fmt.Println(token)
 
 			c.SetCookie("token", token, 3600, "", "", false, true)
 			c.Set("is_logged_in", true)
+
+			// set global user variable to email used to log in
+			loggedInUserEmail = username
+			fmt.Println("User just logged in: " + loggedInUserEmail)
 
 			render(c, gin.H{
 				"title": "Successful Login"}, "login-successful.html")
@@ -106,9 +112,8 @@ func register(ce CognitoExample) gin.HandlerFunc {
 		emailAddress := c.PostForm("email")
 		phoneNumber := c.PostForm("phone_number")
 
-		// Verify username (email) and Password
+		// Verify username (email) and Password using Validator package
 		validate := validator.New()
-
 		userErr := validate.Var(username, "required,email")
 
 		if userErr != nil {
@@ -204,6 +209,10 @@ func OTP(ce CognitoExample) gin.HandlerFunc {
 
 			c.SetCookie("token", token, 3600, "", "", false, true)
 			c.Set("is_logged_in", true)
+
+			// set global user variable to email used to log in
+			loggedInUserEmail = ce.RegFlow.Username
+			fmt.Println("User just Registered and logged in: " + loggedInUserEmail)
 
 			render(c, gin.H{
 				"title": "Successful registration & Login"}, "login-successful.html")

@@ -1,0 +1,19 @@
+<!--votes.html-->
+
+<!--Embed the header.html template at this location-->
+{{ template "header.html" .}}
+
+{{ if .ErrorTitle}}
+<p class="bg-danger">
+  {{.ErrorTitle}}: {{.ErrorMessage}}
+</p>
+{{end}}
+<h2>Your current votes are displayed below: </h2>
+<p>{{.voted1}}</p>
+<p>{{.voted2}}</p>
+<p>{{.voted3}}</p>
+<p>{{.voted4}}</p>
+<p>{{.voted5}}</p>
+
+<!--Embed the footer.html template at this location-->
+{{ template "footer.html" .}}

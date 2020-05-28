@@ -9,10 +9,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
-	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
-
-
+	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
 var sess *session.Session
@@ -57,6 +55,9 @@ func initializeRoutes() {
 
 	// load info from DynamoDB to Projects array in Memory
 	loadProjectsDynamoDB(ddbsvc)
+
+	// Create DynamoDB Service Session for Users Table
+	usrsvc := dynamodb.New(sess)
 
 	// Handle the index route
 	router.GET("/", showIndexPage)
@@ -110,13 +111,13 @@ func initializeRoutes() {
 	// Group Project routes (View, Create)
 	projectRoutes := router.Group("/project")
 	{
-		// Handle GET requests at /project/view/some_project_id
+		// Handle GET requests at /project/view/project_id
 		// This is where VOTING needs to happen
 		projectRoutes.GET("/view/:project_id", ensureLoggedIn(), getProject)
 
-		// Handle POST requests at /project/view/some_project_id
+		// Handle POST requests at /project/view/project_id
 		// Ensure that the user is logged in by using the middleware
-		projectRoutes.POST("/view/:project_id", ensureLoggedIn(), voteForProject(ddbsvc))
+		projectRoutes.POST("/view/:project_id", ensureLoggedIn(), voteForProject(ddbsvc, usrsvc))
 
 		// Handle the GET requests at /project/create
 		// Show the project creation page
@@ -126,6 +127,11 @@ func initializeRoutes() {
 		// Handle POST requests at /project/create
 		// Ensure that the user is logged in by using the middleware
 		projectRoutes.POST("/create", ensureLoggedIn(), createProject(ddbsvc, sess))
+
+		// Handle the GET requests at /project/votes
+		// Show the page with all the votes
+		// Ensure that the user is logged in by using the middleware
+		projectRoutes.GET("/votes", ensureLoggedIn(), showUserVotes(usrsvc))
 
 	}
 }
