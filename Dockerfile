@@ -1,8 +1,15 @@
 FROM golang:latest
-RUN mkdir /unicorn
-ADD . /unicorn/
+#RUN mkdir /unicorn
+ADD . /go/src/unicorn
 # create a working directory
-WORKDIR /unicorn
+WORKDIR /go/src/unicorn
 COPY . .
-# run main.go
-CMD ["go", "run", "unicorn"]
+#RUN go get -d -v ./...
+RUN go get github.com/gin-gonic/gin
+RUN go get github.com/go-playground/validator
+RUN go get github.com/aws/aws-sdk-go/service/ssm
+RUN go get github.com/aws/aws-sdk-go/aws
+RUN go get -d -v ./...
+RUN go install -v ./...
+RUN go build -o unicorn .
+CMD ["./unicorn"]
