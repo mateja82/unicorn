@@ -5,8 +5,10 @@ RUN apk update && apk add --no-cache git
 WORKDIR $GOPATH/src/unicorn
 COPY . .
 
-RUN go get github.com/gin-gonic/gin && \
-    go get github.com/go-playground/validator && \
+RUN go get github.com/gin-gonic/gin \
+    github.com/go-playground/validator \
+    github.com/aws/aws-sdk-go/service/ssm \
+    github.com/aws/aws-sdk-go/aws && \
     go get -d -v
 
 
