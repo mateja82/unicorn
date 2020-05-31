@@ -6,6 +6,19 @@ RUN apk update && apk add --no-cache git
 
 # ADD . /go/src/unicorn
 
+# Create appuser.
+ENV USER=appuser
+ENV UID=10001 
+# See https://stackoverflow.com/a/55757473/12429735RUN 
+RUN adduser \    
+    --disabled-password \    
+    --gecos "" \    
+    --home "/nonexistent" \    
+    --shell "/sbin/nologin" \    
+    --no-create-home \    
+    --uid "${UID}" \    
+    "${USER}"
+
 # create a working directory
 WORKDIR $GOPATH/src/unicorn
 COPY . .
@@ -24,7 +37,9 @@ RUN GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /go/bin/unicorn
 # SCRATCH: build small image
 FROM scratch
 COPY --from=builder . .
-#COPY --from=builder /go/bin/unicorn /
+
+# use non privileged user 
+USER appuser:appuser
 
 EXPOSE 8080
 
