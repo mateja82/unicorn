@@ -63,7 +63,7 @@ docopt==0.6.2
 entrypoints==0.3
 filelock==3.0.12
 html5lib==1.0.1
-httplib2==0.14.0
+httplib2==0.18.0
 hyperlink==19.0.0
 -e git+https://github.com/mateja82/unicorn@5dad04d326df2baabc4dcbc8b18b46de92b10ee2#egg=iac&subdirectory=iac
 idna==2.8
