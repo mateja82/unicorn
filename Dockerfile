@@ -1,15 +1,25 @@
-FROM golang:latest
-#RUN mkdir /unicorn
-ADD . /go/src/unicorn
-# create a working directory
+FROM golang:alpine AS builder
+
+RUN apk update && apk add --no-cache git
+
 WORKDIR /go/src/unicorn
 COPY . .
-#RUN go get -d -v ./...
-RUN go get github.com/gin-gonic/gin
-RUN go get github.com/go-playground/validator
-RUN go get github.com/aws/aws-sdk-go/service/ssm
-RUN go get github.com/aws/aws-sdk-go/aws
-RUN go get -d -v ./...
-RUN go install -v ./...
-RUN go build -o unicorn .
-CMD ["./unicorn"]
+
+RUN go get github.com/gin-gonic/gin \
+    github.com/go-playground/validator \
+    github.com/aws/aws-sdk-go/service/ssm \
+    github.com/aws/aws-sdk-go/aws && \
+    go get -d -v
+
+
+RUN GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /go/bin/unicorn
+
+FROM alpine:latest
+
+COPY --from=builder /go/bin/unicorn /go/bin/unicorn
+WORKDIR /go/src/unicorn
+
+COPY templates ./templates
+EXPOSE 8080
+
+ENTRYPOINT ["/go/bin/unicorn"]
