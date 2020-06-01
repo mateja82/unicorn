@@ -3,9 +3,13 @@ from aws_cdk import (
     aws_dynamodb as ddb,
     aws_cognito as cognito,
     aws_certificatemanager as acm,
+    aws_ecs as ecs,
+    aws_ecs_patterns as patterns,
+    aws_ec2 as ec2,
+    aws_ecr as ecr,
+
 
     core
-
 )
 
 class IacStack(core.Stack):
@@ -107,4 +111,6 @@ class IacStack(core.Stack):
                 user_srp=False
                 ),
         )
+
+        ## Fargate: Create ECS:Fargate with 
 
