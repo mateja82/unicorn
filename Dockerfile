@@ -8,7 +8,7 @@ RUN go get -d -v
 
 RUN GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /go/bin/unicorn
 
-FROM alpine:latest
+FROM alpine:3.10
 COPY --from=builder /go/bin/unicorn /go/bin/unicorn
 WORKDIR /go/src/unicorn
 COPY templates ./templates

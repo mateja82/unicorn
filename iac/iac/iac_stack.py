@@ -4,10 +4,10 @@ from aws_cdk import (
     aws_cognito as cognito,
     aws_certificatemanager as acm,
     aws_ecs as ecs,
-    aws_ecs_patterns as patterns,
+    aws_ecs_patterns as ecs_patterns,
     aws_ec2 as ec2,
     aws_ecr as ecr,
-
+    aws_iam as iam,
 
     core
 )
@@ -112,5 +112,41 @@ class IacStack(core.Stack):
                 ),
         )
 
-        ## Fargate: Create ECS:Fargate with 
+        ## Fargate: Create ECS:Fargate with ECR uploaded image
+
+        vpc = ec2.Vpc(self, "UnicornVPC", max_azs=2)
+
+        cluster = ecs.Cluster(self, "UnicornCluster", vpc=vpc)
+
+        repo = ecr.Repository(self, "unicorn", repository_name="unicorn")
+
+        fargate_role = iam.Role.from_role_arn(self, "ecsTaskExecutionRoleAdminTest", "arn:aws:iam::057097267726:role/ecsTaskExecutionRoleAdminTest",
+           mutable=True
+        )
+
+        fargate_service = ecs_patterns.ApplicationLoadBalancedFargateService(self, "UnicornFargateService",
+            cluster=cluster,
+            cpu=512,
+            desired_count=1,
+            task_image_options=ecs_patterns.ApplicationLoadBalancedTaskImageOptions(
+                image=ecs.ContainerImage.from_registry("057097267726.dkr.ecr.eu-west-1.amazonaws.com/unicorn"),
+                # image=ecs.ContainerImage.from_registry(repo.repository_uri_for_tag()),
+                container_port=8080,
+                container_name="unicorn",
+                execution_role=fargate_role,
+                ),
+                
+            memory_limit_mib=1024,
+            public_load_balancer=True   
+        )
+
+        fargate_service.service.connections.security_groups[0].add_ingress_rule(
+            peer = ec2.Peer.ipv4(vpc.vpc_cidr_block),
+            connection = ec2.Port.tcp(8080),
+            description="Allow http inbound from VPC"
+        )
+
+
+
+
 
