@@ -17,6 +17,18 @@ class IacStack(core.Stack):
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
+
+
+        # Let's start with creating an IAM Service Role, later to be assumed by our ECS Fargate Container
+        # After creating any resource, we'll be attaching IAM policies to this role using the `fargate_role`.
+        fargate_role = iam.Role(
+            self,
+            "ecsTaskExecutionRoleAdmin",
+            assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
+            description="Custom Role assumed by ECS Fargate (container)"
+
+        )
+
         # S3: Create a Bucket for Unicorn Pursuit web page, and grant public read:
         bucket = s3.Bucket(self, "www.unicornpursuit.com",
                         bucket_name="www.unicornpursuit.com",
@@ -26,8 +38,14 @@ class IacStack(core.Stack):
         # Grant public read access to the bucket
         bucket.grant_public_access()
 
+        # Grant S3 Read/Write access to our Fargate Container
+        fargate_role.add_to_policy(statement=iam.PolicyStatement(
+            resources=["*"],
+            actions=["s3:*"]
+        ))
+
         # DynamoDB: Create Table for Project Info (ID, Owner, Content, Photo and Votes)
-        voting = ddb.CfnTable(
+        ddb.CfnTable(
             self, "UnicornDynamoDBVoting",
             table_name="UnicornDynamoDBVoting",
             key_schema=[
@@ -46,12 +64,9 @@ class IacStack(core.Stack):
             )
         )
 
-        # Grant RW writes for Unicorn App in Fargate and relevant Lambdas invoked from API Gateway
-        # voting.grant_read_write_data(user)
-
         # Second DynamoDB table called "users" for storing who voted for whom
         # Example: user1@cepsa.com gave 5 points to project 323, 4 points to 111 etc.
-        users = ddb.Table(
+        ddb.Table(
             self, "UnicornDynamoDBUsers",
             table_name="UnicornDynamoDBUsers",
             partition_key=ddb.Attribute(
@@ -59,6 +74,12 @@ class IacStack(core.Stack):
                 type=ddb.AttributeType.STRING
             )
         )
+
+        # Grant RW writes for Unicorn App in Fargate
+        fargate_role.add_to_policy(statement=iam.PolicyStatement(
+            resources=["*"],
+            actions=["dynamodb:*","dax:*"]
+        ))
 
         # Cognito: Create User Pool
         userpool = cognito.UserPool(
@@ -97,7 +118,7 @@ class IacStack(core.Stack):
         )
 
         ## Cognito: Create App Client & create Authentication Flow with User and Password
-        client = userpool.add_client(
+        userpool.add_client(
             "UnicornAppClient",
             user_pool_client_name="UnicornAppClient",
             generate_secret=False,
@@ -112,17 +133,16 @@ class IacStack(core.Stack):
                 ),
         )
 
+        # Grant Cognito Access to Fargate. Include SSM, so Client App ID can be retrived.
+        fargate_role.add_to_policy(statement=iam.PolicyStatement(
+            resources=["*"],
+            actions=["ssm:*","cognito-identity:*","cognito-idp:*","cognito-sync:*"]
+        ))
+
         ## Fargate: Create ECS:Fargate with ECR uploaded image
-
         vpc = ec2.Vpc(self, "UnicornVPC", max_azs=2)
-
         cluster = ecs.Cluster(self, "UnicornCluster", vpc=vpc)
-
-        repo = ecr.Repository(self, "unicorn", repository_name="unicorn")
-
-        fargate_role = iam.Role.from_role_arn(self, "ecsTaskExecutionRoleAdminTest", "arn:aws:iam::057097267726:role/ecsTaskExecutionRoleAdminTest",
-           mutable=True
-        )
+        ecr.Repository(self, "unicorn", repository_name="unicorn")
 
         fargate_service = ecs_patterns.ApplicationLoadBalancedFargateService(self, "UnicornFargateService",
             cluster=cluster,
@@ -146,7 +166,9 @@ class IacStack(core.Stack):
             description="Allow http inbound from VPC"
         )
 
-
-
-
-
+        # Grant ECR Access to Fargate by attaching an existing ReadOnly policy. so that Unicorn Docker Image can be pulled.
+        #fargate_role.add_managed_policy(iam.ManagedPolicy("AmazonEC2ContainerRegistryReadOnly"))
+        fargate_role.add_to_policy(statement=iam.PolicyStatement(
+            resources=["*"],
+            actions=["ecr:*"]
+        ))
