@@ -168,13 +168,17 @@ func getProject(c *gin.Context) {
 				"payload": project}, "project.html")
 
 		} else {
-			// If the project is not found, abort with an error
-			c.AbortWithError(http.StatusNotFound, err)
+			// If the project is not found:
+			c.HTML(http.StatusBadRequest, "index.html", gin.H{
+				"ErrorTitle":   "Project Error, are you logged in?",
+				"ErrorMessage": err.Error()})
 		}
 
 	} else {
 		// If an invalid project ID is specified in the URL, abort with an error
-		c.AbortWithStatus(http.StatusNotFound)
+		c.HTML(http.StatusBadRequest, "index.html", gin.H{
+			"ErrorTitle":   "Project Error, are you logged in?",
+			"ErrorMessage": err.Error()})
 	}
 }
 

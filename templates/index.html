@@ -3,18 +3,90 @@
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
 
+<!DOCTYPE html>
 
-  <!--Loop over the `payload` variable, which is the list of projects-->
-  {{range .payload }}
-    <!--Create the link for the project based on its ID-->
-    <a href="/project/view/{{.ID}}">
-      <!--Display the title of the project -->
-      <h2>{{.Title}}</h2>
-    </a>
+<html lang="en">
+      <!--If there's an error, display the error-->
+      {{ if .ErrorTitle}}
+      <p class="bg-danger">
+        {{.ErrorTitle}}: {{.ErrorMessage}}
+      </p>
+      {{end}}
+      <!--Create a form that POSTs to the `/u/login` route-->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
+    />
+    <title>Welcome to Unicorn Pursuit</title>
+    <style>
+      .holder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      code {
+        font-size: 9px !important;
+        overflow-x: scroll;
+      }
+    </style>
+  </head>
+
+<body>
+  <h2 class="ui header">Welcome to Unicorn Pursuit</h2>
+  <div class="ui compact message hidden" id="message">
+    <p>
+      Have an amazing idea? Let's implement it, under your lead!
+    </p>
+  </div>
+
+  <img src="https://g.foolcdn.com/editorial/images/550276/unicorn-wearing-i-love-unicorns-sweater-standing-in-front-of-a-rainbow.jpg" alt="Unicorn Pursuit" style="width:500px;height:400px;">
+  <br>
+  <h3>
+    You will find the already submitted project ideas below. Once you Register/Login, you will be able to check them out, and vote for the ones you like most.
+  </h3>
+  <br>
+</body>
+
+
+<!--Loop over the `payload` variable, which is the list of projects-->
+{{range .payload }}
+<a href="/project/view/{{.ID}}">
+<!--Display the title of the project -->
+  <h2>{{.Title}}</h2>
+  </a>
     <!--Display the content of the project-->
     <p>Proposed by: {{.Owner}}</p>
     <p>Description: {{.Content}}</p>
-  {{end}}
+{{end}}
+
+<script
+src="https://code.jquery.com/jquery-3.1.1.min.js"
+integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+crossorigin="anonymous"
+></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+$(".ui.accordion").accordion();
+
+if (document.location.search.includes("error")) {
+  const m = document.getElementById("message");
+  m.style.display = "block";
+  const err = document.location.search.replace("?error=", "");
+  m.textContent = decodeURI(err);
+}
+if (document.location.search.includes("authres")) {
+  const m = document.getElementById("authres");
+  m.style.display = "block";
+  const err = document.location.search.replace("?authres=", "");
+  m.textContent = decodeURI(err);
+}
+</script>
+</html>
+
 
 <!--Embed the footer.html template at this location-->
 {{ template "footer.html" .}}
