@@ -23,7 +23,8 @@ class IacStack(core.Stack):
         # After creating any resource, we'll be attaching IAM policies to this role using the `fargate_role`.
         fargate_role = iam.Role(
             self,
-            "ecsTaskExecutionRoleAdmin",
+            "ecsTaskExecutionRole",
+            role_name="ecsTaskExecutionRole",
             assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
             description="Custom Role assumed by ECS Fargate (container)"
 
@@ -38,14 +39,15 @@ class IacStack(core.Stack):
         # Grant public read access to the bucket
         bucket.grant_public_access()
 
+
         # Grant S3 Read/Write access to our Fargate Container
         fargate_role.add_to_policy(statement=iam.PolicyStatement(
-            resources=["*"],
+            resources=[bucket.bucket_arn],
             actions=["s3:*"]
         ))
 
         # DynamoDB: Create Table for Project Info (ID, Owner, Content, Photo and Votes)
-        ddb.CfnTable(
+        voting_ddb = ddb.CfnTable(
             self, "UnicornDynamoDBVoting",
             table_name="UnicornDynamoDBVoting",
             key_schema=[
@@ -63,10 +65,11 @@ class IacStack(core.Stack):
                 write_capacity_units=5
             )
         )
+        
 
         # Second DynamoDB table called "users" for storing who voted for whom
         # Example: user1@cepsa.com gave 5 points to project 323, 4 points to 111 etc.
-        ddb.Table(
+        users_ddb = ddb.Table(
             self, "UnicornDynamoDBUsers",
             table_name="UnicornDynamoDBUsers",
             partition_key=ddb.Attribute(
@@ -77,8 +80,9 @@ class IacStack(core.Stack):
 
         # Grant RW writes for Unicorn App in Fargate
         fargate_role.add_to_policy(statement=iam.PolicyStatement(
-            resources=["*"],
-            actions=["dynamodb:*","dax:*"]
+            resources=[voting_ddb.attr_arn,
+            users_ddb.table_arn],
+            actions=["dynamodb:*"]
         ))
 
         # Cognito: Create User Pool
@@ -136,7 +140,12 @@ class IacStack(core.Stack):
         # Grant Cognito Access to Fargate. Include SSM, so Client App ID can be retrived.
         fargate_role.add_to_policy(statement=iam.PolicyStatement(
             resources=["*"],
-            actions=["ssm:*","cognito-identity:*","cognito-idp:*","cognito-sync:*"]
+            actions=["ssm:*"]
+        ))
+
+        fargate_role.add_to_policy(statement=iam.PolicyStatement(
+            resources=[userpool.user_pool_arn],
+            actions=["cognito-identity:*","cognito-idp:*","cognito-sync:*"]
         ))
 
         ## Fargate: Create ECS:Fargate with ECR uploaded image

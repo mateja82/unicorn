@@ -53,7 +53,7 @@ func main() {
 
 	var StaticContent string
 
-	StaticContent = "/go/src/unicorn/templates/*"
+	StaticContent = "templates/*"
 
 	// Set the router as the default one provided by Gin
 	router = gin.Default()

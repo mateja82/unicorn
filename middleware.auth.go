@@ -19,6 +19,9 @@ func ensureLoggedIn() gin.HandlerFunc {
 		if !loggedIn {
 			//if token, err := c.Cookie("token"); err != nil || token == "" {
 			c.AbortWithStatus(http.StatusUnauthorized)
+			render(c, gin.H{
+				"title": "To view this content, you need to Login or Register"},
+				"login.html")
 		}
 	}
 }
@@ -34,6 +37,9 @@ func ensureNotLoggedIn() gin.HandlerFunc {
 		if loggedIn {
 			// if token, err := c.Cookie("token"); err == nil || token != "" {
 			c.AbortWithStatus(http.StatusUnauthorized)
+			render(c, gin.H{
+				"title": "Something went wrong, log out and try accessing this again"},
+				"login.html")
 		}
 	}
 }
