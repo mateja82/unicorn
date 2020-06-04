@@ -32,6 +32,7 @@ func performLogin(ce CognitoExample) gin.HandlerFunc {
 	fn := func(c *gin.Context) {
 		// Obtain the POSTed username and password values
 		username := c.PostForm("email")
+
 		password := c.PostForm("password")
 
 		// Authentication Flow for Login to Cognito
@@ -68,8 +69,8 @@ func performLogin(ce CognitoExample) gin.HandlerFunc {
 			c.Set("is_logged_in", true)
 
 			// set global user variable to email used to log in
-			loggedInUserEmail = username
-			fmt.Println("User just logged in: " + loggedInUserEmail)
+			LoggedInUserEmail = username
+			fmt.Println("User just logged in: " + LoggedInUserEmail)
 
 			render(c, gin.H{
 				"title": "Successful Login"}, "login-successful.html")
@@ -211,8 +212,8 @@ func OTP(ce CognitoExample) gin.HandlerFunc {
 			c.Set("is_logged_in", true)
 
 			// set global user variable to email used to log in
-			loggedInUserEmail = ce.RegFlow.Username
-			fmt.Println("User just Registered and logged in: " + loggedInUserEmail)
+			LoggedInUserEmail = ce.RegFlow.Username
+			fmt.Println("User just Registered and logged in: " + LoggedInUserEmail)
 
 			render(c, gin.H{
 				"title": "Successful registration & Login"}, "login-successful.html")

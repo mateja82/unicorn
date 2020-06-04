@@ -34,17 +34,17 @@ type ProjectExample struct {
 	Votes   int    `json:"votes"`
 }
 
-// loggedInUser will help us identify who is logged in, for when permissions and voting need checks
-var loggedInUserEmail string = "anonymous"
+// LoggedInUserEmail will help us identify who is logged in, for when permissions and voting need checks
+var LoggedInUserEmail string = "anonymous"
 
-// currentVotes represents the votes that the logged in used made, saved in a DynamoDB Users
-type currentVotes struct {
-	owner  string
-	voted1 int
-	voted2 int
-	voted3 int
-	voted4 int
-	voted5 int
+// CurrentVotes represents the votes that the logged in used made, saved in a DynamoDB Users
+type CurrentVotes struct {
+	Owner  string
+	Voted1 int
+	Voted2 int
+	Voted3 int
+	Voted4 int
+	Voted5 int
 }
 
 func main() {

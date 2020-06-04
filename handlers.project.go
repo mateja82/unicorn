@@ -98,58 +98,60 @@ func showProjectCreationPage(c *gin.Context) {
 func showUserVotes(usrsvc *dynamodb.DynamoDB) gin.HandlerFunc {
 	fn := func(c *gin.Context) {
 
-		currentVotes := getCurrentVotes(usrsvc)
+		CurrentVotes := getCurrentVotes(usrsvc)
 
-		voted1 := "Your 1-point vote is still available"
-		voted2 := "Your 2-point vote is still available"
-		voted3 := "Your 3-point vote is still available"
-		voted4 := "Your 4-point vote is still available"
-		voted5 := "Your 5-point vote is still available"
+		Voted1 := "Your 1-point vote is still available"
+		Voted2 := "Your 2-point vote is still available"
+		Voted3 := "Your 3-point vote is still available"
+		Voted4 := "Your 4-point vote is still available"
+		Voted5 := "Your 5-point vote is still available"
 
-		if currentVotes.voted1 != 0 {
-			if project, err := getProjectByID(currentVotes.voted1); err == nil {
-				voted1 = "You've given 1 point vote to a project: " + project.Title
+		if CurrentVotes.Voted1 != 0 {
+			if project, err := getProjectByID(CurrentVotes.Voted1); err == nil {
+				Voted1 = "You've given 1 point vote to a project: " + project.Title
 			} else {
 				// If the project is not found, abort with an error
 				c.AbortWithError(http.StatusNotFound, err)
 			}
 		}
-		if currentVotes.voted2 != 0 {
-			if project, err := getProjectByID(currentVotes.voted2); err == nil {
-				voted2 = "You've given 2 point vote to a project: " + project.Title
+		if CurrentVotes.Voted2 != 0 {
+			if project, err := getProjectByID(CurrentVotes.Voted2); err == nil {
+				Voted2 = "You've given 2 point vote to a project: " + project.Title
 			} else {
 				// If the project is not found, abort with an error
 				c.AbortWithError(http.StatusNotFound, err)
 			}
 		}
-		if currentVotes.voted3 != 0 {
-			if project, err := getProjectByID(currentVotes.voted3); err == nil {
-				voted3 = "You've given 3 point vote to a project: " + project.Title
+		if CurrentVotes.Voted3 != 0 {
+			if project, err := getProjectByID(CurrentVotes.Voted3); err == nil {
+				Voted3 = "You've given 3 point vote to a project: " + project.Title
+
 			} else {
 				// If the project is not found, abort with an error
 				c.AbortWithError(http.StatusNotFound, err)
 			}
 		}
-		if currentVotes.voted4 != 0 {
-			if project, err := getProjectByID(currentVotes.voted4); err == nil {
-				voted4 = "You've given 4 point vote to a project: " + project.Title
+		if CurrentVotes.Voted4 != 0 {
+			if project, err := getProjectByID(CurrentVotes.Voted4); err == nil {
+				Voted4 = "You've given 4 point vote to a project: " + project.Title
 			} else {
 				// If the project is not found, abort with an error
 				c.AbortWithError(http.StatusNotFound, err)
 			}
 		}
-		if currentVotes.voted5 != 0 {
-			if project, err := getProjectByID(currentVotes.voted5); err == nil {
-				voted5 = "You've given 5 point vote to a project: " + project.Title
+		if CurrentVotes.Voted5 != 0 {
+			if project, err := getProjectByID(CurrentVotes.Voted5); err == nil {
+				Voted5 = "You've given 5 point vote to a project: " + project.Title
 			} else {
 				// If the project is not found, abort with an error
 				c.AbortWithError(http.StatusNotFound, err)
 			}
 		}
 		// Call the render function with the name of the template to render
+		fmt.Println(Voted1 + Voted2)
 		render(c, gin.H{
 			"title":  "My Votes",
-			"voted1": voted1, "voted2": voted2, "voted3": voted3, "voted4": voted4, "voted5": voted5}, "votes.html")
+			"voted1": Voted1, "voted2": Voted2, "voted3": Voted3, "voted4": Voted4, "voted5": Voted5}, "votes.html")
 
 	}
 	return gin.HandlerFunc(fn)
@@ -173,7 +175,6 @@ func getProject(c *gin.Context) {
 				"ErrorTitle":   "Project Error, are you logged in?",
 				"ErrorMessage": err.Error()})
 		}
-
 	} else {
 		// If an invalid project ID is specified in the URL, abort with an error
 		c.HTML(http.StatusBadRequest, "index.html", gin.H{
@@ -186,7 +187,7 @@ func voteForProject(ddbsvc *dynamodb.DynamoDB, usrsvc *dynamodb.DynamoDB) gin.Ha
 	fn := func(c *gin.Context) {
 
 		// Retrieve information of users current votes from usrsvc DynamoDB
-		currentVotes := getCurrentVotes(usrsvc)
+		CurrentVotes := getCurrentVotes(usrsvc)
 
 		votes := c.PostForm("votes")
 
@@ -197,67 +198,67 @@ func voteForProject(ddbsvc *dynamodb.DynamoDB, usrsvc *dynamodb.DynamoDB) gin.Ha
 				// votesInt is a INT version of the string "votes".
 				if votesInt, err := strconv.Atoi(votes); err == nil {
 
-					// First we need to check if the user has already voted for this particular project (projectID)
-					if projectID == currentVotes.voted1 || projectID == currentVotes.voted2 || projectID == currentVotes.voted3 || projectID == currentVotes.voted4 || projectID == currentVotes.voted5 {
+					// First we need to check if the user has already Voted for this particular project (projectID)
+					if projectID == CurrentVotes.Voted1 || projectID == CurrentVotes.Voted2 || projectID == CurrentVotes.Voted3 || projectID == CurrentVotes.Voted4 || projectID == CurrentVotes.Voted5 {
 						/*
-							var projectError error = errors.New("You have already voted for this project! You cannot vote for the same project twice")
+							var projectError error = errors.New("You have already Voted for this project! You cannot vote for the same project twice")
 							c.HTML(http.StatusBadRequest, "votes.html", gin.H{
 								"ErrorTitle":   "Already Voted!!!",
 								"ErrorMessage": projectError.Error()})
 						*/
-						//votingError := "You have already voted for this project! You cannot vote for the same project twice"
+						//votingError := "You have already Voted for this project! You cannot vote for the same project twice"
 
 						var projectIDError error = errors.New("You're not tryint to cheat, are you? Check out your previous votes below")
-
+						fmt.Println("Project Voted!")
 						render(c, gin.H{
 							"title":   "My Votes",
-							"payload": currentVotes, "ErrorTitle": "You've already voted for this project",
+							"payload": CurrentVotes, "ErrorTitle": "You've already Voted for this project",
 							"ErrorMessage": projectIDError.Error()}, "votes.html")
 
 					} else {
 						AlreadyVoted := c.Param("project_id")
-						votedBoolean := false
+						VotedBoolean := false
 						// Switch number of votes to the AlreadyVoted struct, retrieved from Users DynamoDB
 						switch votesInt {
 						case 1:
-							if currentVotes.voted1 != 0 {
-								votedBoolean = true
+							if CurrentVotes.Voted1 != 0 {
+								VotedBoolean = true
 								fmt.Println("User already assigned 1 point to:" + AlreadyVoted)
 							}
 
 						case 2:
-							if currentVotes.voted2 != 0 {
-								votedBoolean = true
+							if CurrentVotes.Voted2 != 0 {
+								VotedBoolean = true
 								fmt.Println("User already assigned 2 points to:" + AlreadyVoted)
 							}
 						case 3:
-							if currentVotes.voted3 != 0 {
-								votedBoolean = true
+							if CurrentVotes.Voted3 != 0 {
+								VotedBoolean = true
 								fmt.Println("User already assigned 3 points to:" + AlreadyVoted)
 							}
 						case 4:
-							if currentVotes.voted4 != 0 {
-								votedBoolean = true
+							if CurrentVotes.Voted4 != 0 {
+								VotedBoolean = true
 								fmt.Println("User already assigned 4 points to:" + AlreadyVoted)
 							}
 						case 5:
-							if currentVotes.voted5 != 0 {
-								votedBoolean = true
+							if CurrentVotes.Voted5 != 0 {
+								VotedBoolean = true
 								fmt.Println("User already assigned 5 points to:" + AlreadyVoted)
 							}
 						default:
-							votedBoolean = false
+							VotedBoolean = false
 						}
 
-						if votedBoolean == true {
+						if VotedBoolean == true {
 							// Send message to the user that the vote cannot be done:
 
 							//votingError := "You trying to cheat?!?"
 							var projectError error = errors.New("You're not tryint to cheat, are you? Check out your previous votes below")
-
+							fmt.Println("Voting Error in number of points!")
 							render(c, gin.H{
 								"title":   "My Votes",
-								"payload": currentVotes, "ErrorTitle": "Number of points assigned",
+								"payload": CurrentVotes, "ErrorTitle": "Number of points assigned",
 								"ErrorMessage": projectError.Error()}, "votes.html")
 
 						} else {
@@ -305,7 +306,7 @@ func voteForProject(ddbsvc *dynamodb.DynamoDB, usrsvc *dynamodb.DynamoDB) gin.Ha
 
 							// Redirect to Voting SUccessful
 							render(c, gin.H{
-								"title":   "You've voted",
+								"title":   "You've Voted",
 								"payload": project}, "voting-successful.html")
 
 						}
@@ -330,7 +331,7 @@ func voteForProject(ddbsvc *dynamodb.DynamoDB, usrsvc *dynamodb.DynamoDB) gin.Ha
 
 func showLeaderboardPage(c *gin.Context) {
 
-	// Get the sorted list of projects, starting with currently highest voted
+	// Get the sorted list of projects, starting with currently highest Voted
 	projects := getSortedProjects()
 
 	// Call the render function with the name of the template to render
@@ -449,18 +450,67 @@ func createProject(ddbsvc *dynamodb.DynamoDB, sess *session.Session) gin.Handler
 	return gin.HandlerFunc(fn)
 }
 
-func getCurrentVotes(usrsvc *dynamodb.DynamoDB) currentVotes {
+func getCurrentVotes(svc *dynamodb.DynamoDB) CurrentVotes {
 
-	currentUsersVotes := currentVotes{}
+	owner := LoggedInUserEmail
+	currentUsersVotes := CurrentVotes{}
 
-	currentUsersVotes.owner = loggedInUserEmail
-	currentUsersVotes.voted1 = 0
-	currentUsersVotes.voted2 = 0
-	currentUsersVotes.voted3 = 0
-	currentUsersVotes.voted4 = 3
-	currentUsersVotes.voted5 = 4
+	result, err := svc.GetItem(&dynamodb.GetItemInput{
+		TableName: aws.String(tableUsersName),
+		Key: map[string]*dynamodb.AttributeValue{
+			"Owner": {
+				S: aws.String(owner),
+			},
+		},
+	})
+	if err != nil {
+		fmt.Println(err.Error())
+	} else {
+		fmt.Println(result)
+	}
 
-	// Consult User DynamoDB for info on voting so far
+	err = dynamodbattribute.UnmarshalMap(result.Item, &currentUsersVotes)
+	if err != nil {
+		panic(fmt.Sprintf("Failed to unmarshal Record, %v", err))
+	} else {
+		if currentUsersVotes.Owner != LoggedInUserEmail {
+			// Create an Item with Owner = LoggedInUserEmail in Users DynamoDB, so that user can vote, and we can register those votes. Set all Voted values to 0.
+			createUserInUserDB(svc, LoggedInUserEmail)
+		}
+		fmt.Println(currentUsersVotes)
+	}
 
 	return currentUsersVotes
+}
+
+func createUserInUserDB(svc *dynamodb.DynamoDB, LoggedInUserEmail string) {
+
+	var item CurrentVotes
+	fmt.Println("Creating new user in UserDB: " + LoggedInUserEmail)
+
+	item.Owner = LoggedInUserEmail
+	item.Voted1 = 0
+	item.Voted2 = 0
+	item.Voted3 = 0
+	item.Voted4 = 0
+	item.Voted5 = 0
+
+	av, err := dynamodbattribute.MarshalMap(item)
+	if err != nil {
+		fmt.Println("Got error marshalling new movie item:")
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
+	input := &dynamodb.PutItemInput{
+		Item:      av,
+		TableName: aws.String(tableUsersName),
+	}
+	_, err = svc.PutItem(input)
+	if err != nil {
+		fmt.Println("Got error calling PutItem:")
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
 }
