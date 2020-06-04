@@ -73,7 +73,7 @@ class IacStack(core.Stack):
             self, "UnicornDynamoDBUsers",
             table_name="UnicornDynamoDBUsers",
             partition_key=ddb.Attribute(
-                name="owner",
+                name="Owner",
                 type=ddb.AttributeType.STRING
             )
         )
