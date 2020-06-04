@@ -200,14 +200,6 @@ func voteForProject(ddbsvc *dynamodb.DynamoDB, usrsvc *dynamodb.DynamoDB) gin.Ha
 
 					// First we need to check if the user has already Voted for this particular project (projectID)
 					if projectID == CurrentVotes.Voted1 || projectID == CurrentVotes.Voted2 || projectID == CurrentVotes.Voted3 || projectID == CurrentVotes.Voted4 || projectID == CurrentVotes.Voted5 {
-						/*
-							var projectError error = errors.New("You have already Voted for this project! You cannot vote for the same project twice")
-							c.HTML(http.StatusBadRequest, "votes.html", gin.H{
-								"ErrorTitle":   "Already Voted!!!",
-								"ErrorMessage": projectError.Error()})
-						*/
-						//votingError := "You have already Voted for this project! You cannot vote for the same project twice"
-
 						var projectIDError error = errors.New("You're not tryint to cheat, are you? Check out your previous votes below")
 						fmt.Println("Project Voted!")
 						render(c, gin.H{
@@ -251,9 +243,8 @@ func voteForProject(ddbsvc *dynamodb.DynamoDB, usrsvc *dynamodb.DynamoDB) gin.Ha
 						}
 
 						if VotedBoolean == true {
-							// Send message to the user that the vote cannot be done:
 
-							//votingError := "You trying to cheat?!?"
+							// Send message to the user that the vote cannot be done:
 							var projectError error = errors.New("You're not tryint to cheat, are you? Check out your previous votes below")
 							fmt.Println("Voting Error in number of points!")
 							render(c, gin.H{
@@ -303,11 +294,19 @@ func voteForProject(ddbsvc *dynamodb.DynamoDB, usrsvc *dynamodb.DynamoDB) gin.Ha
 
 							// get project again, to be sure Vote value is updated
 							project, err := getProjectByID(projectID)
+							if err != nil {
+								c.HTML(http.StatusBadRequest, "project.html", gin.H{
+									"ErrorTitle":   "Error updating Votes",
+									"ErrorMessage": err.Error()})
+							} else {
+								// Update vote in Users Database, since all Checks for vote validation have shown OK
+								updateUsersDatabase(usrsvc, projectID, votesInt)
 
-							// Redirect to Voting SUccessful
-							render(c, gin.H{
-								"title":   "You've Voted",
-								"payload": project}, "voting-successful.html")
+								// Redirect to Voting Successful
+								render(c, gin.H{
+									"title":   "You've Voted",
+									"payload": project}, "voting-successful.html")
+							}
 
 						}
 					}
@@ -513,4 +512,45 @@ func createUserInUserDB(svc *dynamodb.DynamoDB, LoggedInUserEmail string) {
 		os.Exit(1)
 	}
 
+}
+
+func updateUsersDatabase(svc *dynamodb.DynamoDB, projectID int, votes int) {
+
+	voted := ""
+	switch votes {
+	case 1:
+		voted = "Voted1"
+	case 2:
+		voted = "Voted2"
+	case 3:
+		voted = "Voted3"
+	case 4:
+		voted = "Voted4"
+	case 5:
+		voted = "Voted5"
+	}
+
+	project := strconv.Itoa(projectID)
+
+	input := &dynamodb.UpdateItemInput{
+		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+			":r": {
+				N: aws.String(project),
+			},
+		},
+		TableName: aws.String(tableUsersName),
+		Key: map[string]*dynamodb.AttributeValue{
+			"Owner": {
+				S: aws.String(LoggedInUserEmail),
+			},
+		},
+		ReturnValues:     aws.String("UPDATED_NEW"),
+		UpdateExpression: aws.String("set " + voted + " = :r"),
+	}
+
+	_, err := svc.UpdateItem(input)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
 }
