@@ -2,8 +2,49 @@
 
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
+  />
+  <title>Welcome to Unicorn Pursuit</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        .center-fit {
+            max-width: 500px;
+            max-height: 100vh;
+            margin: auto;
+        }
+        .holder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      code {
+        font-size: 9px !important;
+        overflow-x: scroll;
+      }
+    </style>
+</head>
+
+<body>
+  <h2 class="ui header">About Unicorn Pursuit</h2>
+<div class="imgbox">
+    <img src="https://i.postimg.cc/2j0C4h7y/About-Unicorn.png" alt="Unicorn Pursuit" class="center-fit" >
+  </div>
+
+</body>
+
     
-  <img src="https://i.postimg.cc/jSR73VPG/About-Unicorn.png" alt="Unicorn Description" style="width:700px;height:450px;">
 
 <!--Embed the footer.html template at this location-->
 {{ template "footer.html" .}}
