@@ -64,7 +64,7 @@ func loadProjectsDynamoDB(ddbsvc *dynamodb.DynamoDB) {
 
 			err = dynamodbattribute.UnmarshalMap(i, &item)
 			if err != nil {
-				fmt.Println("Got error unmarshalling:")
+				fmt.Println("Got error doing unmarshall:")
 				fmt.Println(err.Error())
 				os.Exit(1)
 			}
