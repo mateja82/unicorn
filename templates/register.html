@@ -1,6 +1,5 @@
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
-<!--register.html-->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -13,6 +12,20 @@
     />
     <title>Register</title>
     <style>
+      *{
+        margin: 0;
+        padding: 0;
+      }
+      ul{
+        list-style: none;
+      }
+      .all_page{
+        background: url('https://i.postimg.cc/j29nhLfw/cover.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        padding: 3.3rem 0;
+        }
       .holder {
         display: flex;
         align-items: center;
@@ -21,75 +34,78 @@
       #message {
           display: none
       }
+      form.ui.form.padded.segment{
+        box-shadow: 10px 8px 30px 5px #ddd;
+      }
     </style>
   </head>
-      <!--If there's an error, display the error-->
-      {{ if .ErrorTitle}}
-      <p class="bg-danger">
-        {{.ErrorTitle}}: {{.ErrorMessage}}
-      </p>
-      {{end}}
-  <body class="holder">
-    <div class="ui raised text container">
-      <div class="column">
-        <h1 class="ui header">Register</h1>
-        <div class="ui compact message" id="message">
-          <p>
-            An error ocurred during your request.
-          </p>
+<body>
+  <div class="all_page">
+    <div class="holder">
+      <div class="ui raised text container">
+        <div class="column">
+          <h1 class="ui header">Register</h1>
+          <div class="ui compact message" id="message">
+            <p>
+              An error ocurred during your request.
+            </p>
+          </div>
+          <form class="ui form padded segment" method="post" action="/u/register">
+            <div class="field">
+              <label>Full Name</label>
+              <input
+                type="text"
+                name="name"
+                required
+                placeholder="Jose Garcia"
+              />
+            </div>
+            <div class="field">
+              <label>e-mail Address (you won't be able to vote or submit a project unless email is valid)</label>
+              <input
+                type="text"
+                name="email"
+                required
+                placeholder="jose.garcia@unicorn.com"
+              />
+            </div>
+            <div class="field">
+              <label>Password</label>
+              <input
+                type="password"
+                name="password"
+                required
+                placeholder="Password"
+              />
+            </div>
+            <div id="pswd_info">
+              <h4>Password must meet the following requirements:</h4>
+              <ul>
+                  <li id="letter" class="invalid">At least <strong>one letter</strong></li>
+                  <li id="capital" class="invalid">At least <strong>one capital letter</strong></li>
+                  <li id="number" class="invalid">At least <strong>one number</strong></li>
+                  <li id="length" class="invalid">Be at least <strong>10 characters</strong></li>
+                  <li id="length" class="invalid">At least <strong>one "weird" character</strong></li>
+              </ul>
+          </div>
+            <div class="field">
+              <label>Phone number (we will send you an SMS to verify)</label>
+              <input
+                type="text"
+                name="phone_number"
+                required
+                placeholder="+XXXXXXXXXXX"
+              />
+            </div>
+            <button class="ui button" type="submit">Register</button>
+          </form>
         </div>
-        <form class="ui form padded segment" method="post" action="/u/register">
-          <div class="field">
-            <label>Full Name</label>
-            <input
-              type="text"
-              name="name"
-              required
-              placeholder="Jose Garcia"
-            />
-          </div>
-          <div class="field">
-            <label>e-mail Address (you won't be able to vote or submit a project unless email is valid)</label>
-            <input
-              type="text"
-              name="email"
-              required
-              placeholder="jose.garcia@unicorn.com"
-            />
-          </div>
-          <div class="field">
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              required
-              placeholder="Password"
-            />
-          </div>
-          <div id="pswd_info">
-            <h4>Password must meet the following requirements:</h4>
-            <ul>
-                <li id="letter" class="invalid">At least <strong>one letter</strong></li>
-                <li id="capital" class="invalid">At least <strong>one capital letter</strong></li>
-                <li id="number" class="invalid">At least <strong>one number</strong></li>
-                <li id="length" class="invalid">Be at least <strong>10 characters</strong></li>
-                <li id="length" class="invalid">At least <strong>one "weird" character</strong></li>
-            </ul>
-        </div>
-          <div class="field">
-            <label>Phone number (we will send you an SMS to verify)</label>
-            <input
-              type="text"
-              name="phone_number"
-              required
-              placeholder="+XXXXXXXXXXX"
-            />
-          </div>
-          <button class="ui button" type="submit">Register</button>
-        </form>
-      </div>
+      </div> 
     </div>
-  </body>
+    
+  </div> 
+</body>
+  
   <script>
     if (document.location.search.includes("error")) {
         const m = document.getElementById("message")
@@ -99,3 +115,5 @@
     }
     </script>
 </html>
+<!--Embed the footer.html template at this location-->
+{{ template "footer.html" .}}

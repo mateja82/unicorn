@@ -1,0 +1,1020 @@
+Resources:
+  ecsTaskExecutionRole34F54B99:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Description: Custom Role assumed by ECS Fargate (container)
+      RoleName: ecsTaskExecutionRole
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/ecsTaskExecutionRole/Resource
+  ecsTaskExecutionRoleDefaultPolicy647C5358:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: s3:*
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - wwwunicornpursuitcom6F23076E
+                - Arn
+          - Action: dynamodb:*
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - UnicornDynamoDBVoting
+                  - Arn
+              - Fn::GetAtt:
+                  - UnicornDynamoDBUsers26D7912D
+                  - Arn
+          - Action: ssm:*
+            Effect: Allow
+            Resource: "*"
+          - Action:
+              - cognito-identity:*
+              - cognito-idp:*
+              - cognito-sync:*
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - CognitoUnicornUserPool1C6E3F95
+                - Arn
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - UnicornFargateServiceTaskDefunicornLogGroup4BBEDC4D
+                - Arn
+          - Action: ecr:*
+            Effect: Allow
+            Resource: "*"
+        Version: "2012-10-17"
+      PolicyName: ecsTaskExecutionRoleDefaultPolicy647C5358
+      Roles:
+        - Ref: ecsTaskExecutionRole34F54B99
+    Metadata:
+      aws:cdk:path: UnicornIaC/ecsTaskExecutionRole/DefaultPolicy/Resource
+  wwwunicornpursuitcom6F23076E:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      BucketName: www.unicornpursuit.com
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: project
+          Value: unicorn
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: UnicornIaC/www.unicornpursuit.com/Resource
+  wwwunicornpursuitcomPolicy46AB873C:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: wwwunicornpursuitcom6F23076E
+      PolicyDocument:
+        Statement:
+          - Action: s3:GetObject
+            Effect: Allow
+            Principal: "*"
+            Resource:
+              Fn::Join:
+                - ""
+                - - Fn::GetAtt:
+                      - wwwunicornpursuitcom6F23076E
+                      - Arn
+                  - /*
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: UnicornIaC/www.unicornpursuit.com/Policy/Resource
+  UnicornDynamoDBVoting:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+        - AttributeName: owner
+          KeyType: RANGE
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: "N"
+        - AttributeName: owner
+          AttributeType: S
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      TableName: UnicornDynamoDBVoting
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornDynamoDBVoting
+  UnicornDynamoDBUsers26D7912D:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      KeySchema:
+        - AttributeName: Owner
+          KeyType: HASH
+      AttributeDefinitions:
+        - AttributeName: Owner
+          AttributeType: S
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      TableName: UnicornDynamoDBUsers
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: project
+          Value: unicorn
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornDynamoDBUsers/Resource
+  CognitoUnicornUserPoolsmsRoleD1ABE037:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Condition:
+              StringEquals:
+                sts:ExternalId: UnicornIaCCognitoUnicornUserPool358A89E2
+            Effect: Allow
+            Principal:
+              Service: cognito-idp.amazonaws.com
+        Version: "2012-10-17"
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Action: sns:Publish
+                Effect: Allow
+                Resource: "*"
+            Version: "2012-10-17"
+          PolicyName: sns-publish
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/CognitoUnicornUserPool/smsRole/Resource
+  CognitoUnicornUserPool1C6E3F95:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: false
+      AutoVerifiedAttributes:
+        - phone_number
+      EmailVerificationMessage: The verification code to your new account is {####}
+      EmailVerificationSubject: Verify your new account
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 12
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+          RequireUppercase: true
+      Schema:
+        - Name: email
+          Required: true
+        - Name: name
+          Required: true
+        - Name: phone_number
+          Required: true
+      SmsConfiguration:
+        ExternalId: UnicornIaCCognitoUnicornUserPool358A89E2
+        SnsCallerArn:
+          Fn::GetAtt:
+            - CognitoUnicornUserPoolsmsRoleD1ABE037
+            - Arn
+      SmsVerificationMessage: Hey Unicorn Hunter, welcome to Unicorn Pursuit! Your OTP is {####}
+      UsernameAttributes:
+        - email
+      UserPoolName: CognitoUnicornUserPool
+      UserPoolTags:
+        bu: cloud
+        environment: prod
+        project: unicorn
+      VerificationMessageTemplate:
+        DefaultEmailOption: CONFIRM_WITH_CODE
+        EmailMessage: The verification code to your new account is {####}
+        EmailSubject: Verify your new account
+        SmsMessage: Hey Unicorn Hunter, welcome to Unicorn Pursuit! Your OTP is {####}
+    Metadata:
+      aws:cdk:path: UnicornIaC/CognitoUnicornUserPool/Resource
+  CognitoUnicornUserPoolUnicornAppClientA01194FB:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId:
+        Ref: CognitoUnicornUserPool1C6E3F95
+      ClientName: UnicornAppClient
+      ExplicitAuthFlows:
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+      GenerateSecret: false
+    Metadata:
+      aws:cdk:path: UnicornIaC/CognitoUnicornUserPool/UnicornAppClient/Resource
+  UnicornVPCF3838288:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: Name
+          Value: UnicornIaC/UnicornVPC
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/Resource
+  UnicornVPCPublicSubnet1Subnet0C783D92:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.0.0/18
+      VpcId:
+        Ref: UnicornVPCF3838288
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: Name
+          Value: UnicornIaC/UnicornVPC/PublicSubnet1
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PublicSubnet1/Subnet
+  UnicornVPCPublicSubnet1RouteTableC4068DAF:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: UnicornVPCF3838288
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: Name
+          Value: UnicornIaC/UnicornVPC/PublicSubnet1
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PublicSubnet1/RouteTable
+  UnicornVPCPublicSubnet1RouteTableAssociation340E2366:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: UnicornVPCPublicSubnet1RouteTableC4068DAF
+      SubnetId:
+        Ref: UnicornVPCPublicSubnet1Subnet0C783D92
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PublicSubnet1/RouteTableAssociation
+  UnicornVPCPublicSubnet1DefaultRoute772099A7:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: UnicornVPCPublicSubnet1RouteTableC4068DAF
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: UnicornVPCIGW09B33D20
+    DependsOn:
+      - UnicornVPCVPCGW58D409A8
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PublicSubnet1/DefaultRoute
+  UnicornVPCPublicSubnet1EIP2535FC0A:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: Name
+          Value: UnicornIaC/UnicornVPC/PublicSubnet1
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PublicSubnet1/EIP
+  UnicornVPCPublicSubnet1NATGateway3B6CB854:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - UnicornVPCPublicSubnet1EIP2535FC0A
+          - AllocationId
+      SubnetId:
+        Ref: UnicornVPCPublicSubnet1Subnet0C783D92
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: Name
+          Value: UnicornIaC/UnicornVPC/PublicSubnet1
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PublicSubnet1/NATGateway
+  UnicornVPCPublicSubnet2Subnet7E5054FF:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.64.0/18
+      VpcId:
+        Ref: UnicornVPCF3838288
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: Name
+          Value: UnicornIaC/UnicornVPC/PublicSubnet2
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PublicSubnet2/Subnet
+  UnicornVPCPublicSubnet2RouteTable15C5E3F9:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: UnicornVPCF3838288
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: Name
+          Value: UnicornIaC/UnicornVPC/PublicSubnet2
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PublicSubnet2/RouteTable
+  UnicornVPCPublicSubnet2RouteTableAssociationD14989E2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: UnicornVPCPublicSubnet2RouteTable15C5E3F9
+      SubnetId:
+        Ref: UnicornVPCPublicSubnet2Subnet7E5054FF
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PublicSubnet2/RouteTableAssociation
+  UnicornVPCPublicSubnet2DefaultRouteE4890189:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: UnicornVPCPublicSubnet2RouteTable15C5E3F9
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: UnicornVPCIGW09B33D20
+    DependsOn:
+      - UnicornVPCVPCGW58D409A8
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PublicSubnet2/DefaultRoute
+  UnicornVPCPublicSubnet2EIPC14637C2:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: Name
+          Value: UnicornIaC/UnicornVPC/PublicSubnet2
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PublicSubnet2/EIP
+  UnicornVPCPublicSubnet2NATGateway3DBFE1C3:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - UnicornVPCPublicSubnet2EIPC14637C2
+          - AllocationId
+      SubnetId:
+        Ref: UnicornVPCPublicSubnet2Subnet7E5054FF
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: Name
+          Value: UnicornIaC/UnicornVPC/PublicSubnet2
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PublicSubnet2/NATGateway
+  UnicornVPCPrivateSubnet1Subnet13641B43:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.128.0/18
+      VpcId:
+        Ref: UnicornVPCF3838288
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: Name
+          Value: UnicornIaC/UnicornVPC/PrivateSubnet1
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PrivateSubnet1/Subnet
+  UnicornVPCPrivateSubnet1RouteTable6D43CAA2:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: UnicornVPCF3838288
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: Name
+          Value: UnicornIaC/UnicornVPC/PrivateSubnet1
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PrivateSubnet1/RouteTable
+  UnicornVPCPrivateSubnet1RouteTableAssociation1829ED52:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: UnicornVPCPrivateSubnet1RouteTable6D43CAA2
+      SubnetId:
+        Ref: UnicornVPCPrivateSubnet1Subnet13641B43
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PrivateSubnet1/RouteTableAssociation
+  UnicornVPCPrivateSubnet1DefaultRouteFCF03381:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: UnicornVPCPrivateSubnet1RouteTable6D43CAA2
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: UnicornVPCPublicSubnet1NATGateway3B6CB854
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PrivateSubnet1/DefaultRoute
+  UnicornVPCPrivateSubnet1DefaultNAT7C2DD21B:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: UnicornVPCPrivateSubnet1RouteTable6D43CAA2
+      DestinationCidrBlock: 0.0.0.0/0
+      InstanceId:
+        Ref: NAT0326B2C5
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PrivateSubnet1/DefaultNAT
+  UnicornVPCPrivateSubnet2Subnet922C27BA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.192.0/18
+      VpcId:
+        Ref: UnicornVPCF3838288
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: Name
+          Value: UnicornIaC/UnicornVPC/PrivateSubnet2
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PrivateSubnet2/Subnet
+  UnicornVPCPrivateSubnet2RouteTable56466D5B:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: UnicornVPCF3838288
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: Name
+          Value: UnicornIaC/UnicornVPC/PrivateSubnet2
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PrivateSubnet2/RouteTable
+  UnicornVPCPrivateSubnet2RouteTableAssociation15FC379B:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: UnicornVPCPrivateSubnet2RouteTable56466D5B
+      SubnetId:
+        Ref: UnicornVPCPrivateSubnet2Subnet922C27BA
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PrivateSubnet2/RouteTableAssociation
+  UnicornVPCPrivateSubnet2DefaultRoute6956C836:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: UnicornVPCPrivateSubnet2RouteTable56466D5B
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: UnicornVPCPublicSubnet2NATGateway3DBFE1C3
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PrivateSubnet2/DefaultRoute
+  UnicornVPCPrivateSubnet2DefaultNAT0D67E90D:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: UnicornVPCPrivateSubnet2RouteTable56466D5B
+      DestinationCidrBlock: 0.0.0.0/0
+      InstanceId:
+        Ref: NAT0326B2C5
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/PrivateSubnet2/DefaultNAT
+  UnicornVPCIGW09B33D20:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: Name
+          Value: UnicornIaC/UnicornVPC
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/IGW
+  UnicornVPCVPCGW58D409A8:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: UnicornVPCF3838288
+      InternetGatewayId:
+        Ref: UnicornVPCIGW09B33D20
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornVPC/VPCGW
+  NATInstanceSecurityGroup9743E3D1:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: UnicornIaC/NAT/InstanceSecurityGroup
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: Name
+          Value: NAT
+        - Key: project
+          Value: unicorn
+      VpcId:
+        Ref: UnicornVPCF3838288
+    Metadata:
+      aws:cdk:path: UnicornIaC/NAT/InstanceSecurityGroup/Resource
+  NATInstanceSecurityGroupfromUnicornIaCUnicornFargateServiceSecurityGroup05B80024443400DA78B:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      Description: Allow https from Fargate Service
+      FromPort: 443
+      GroupId:
+        Fn::GetAtt:
+          - NATInstanceSecurityGroup9743E3D1
+          - GroupId
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - UnicornFargateServiceSecurityGroupBFC736BD
+          - GroupId
+      ToPort: 443
+    Metadata:
+      aws:cdk:path: UnicornIaC/NAT/InstanceSecurityGroup/from UnicornIaCUnicornFargateServiceSecurityGroup05B80024:443
+  NATInstanceRole5EE4488D:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+        Version: "2012-10-17"
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: Name
+          Value: NAT
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/NAT/InstanceRole/Resource
+  NATInstanceProfile3A090BCA:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - Ref: NATInstanceRole5EE4488D
+    Metadata:
+      aws:cdk:path: UnicornIaC/NAT/InstanceProfile
+  NAT0326B2C5:
+    Type: AWS::EC2::Instance
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      IamInstanceProfile:
+        Ref: NATInstanceProfile3A090BCA
+      ImageId:
+        Ref: SsmParameterValueawsserviceamiamazonlinuxlatestamznamihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter
+      InstanceType: t3.nano
+      SecurityGroupIds:
+        - Fn::GetAtt:
+            - NATInstanceSecurityGroup9743E3D1
+            - GroupId
+      SourceDestCheck: false
+      SubnetId:
+        Ref: UnicornVPCPublicSubnet1Subnet0C783D92
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: Name
+          Value: NAT
+        - Key: project
+          Value: unicorn
+      UserData:
+        Fn::Base64: >-
+          #!/bin/bash
+
+          sysctl -w net.ipv4.ip_forward=1
+
+          /sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+    DependsOn:
+      - NATInstanceRole5EE4488D
+    Metadata:
+      aws:cdk:path: UnicornIaC/NAT/Resource
+  UnicornCluster487CB41D:
+    Type: AWS::ECS::Cluster
+    Properties:
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornCluster/Resource
+  unicorn760BEDBC:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: unicorn
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: project
+          Value: unicorn
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: UnicornIaC/unicorn/Resource
+  UnicornFargateServiceLB9F2D10F0:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Scheme: internet-facing
+      SecurityGroups:
+        - Fn::GetAtt:
+            - UnicornFargateServiceLBSecurityGroup142DBFE7
+            - GroupId
+      Subnets:
+        - Ref: UnicornVPCPublicSubnet1Subnet0C783D92
+        - Ref: UnicornVPCPublicSubnet2Subnet7E5054FF
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: project
+          Value: unicorn
+      Type: application
+    DependsOn:
+      - UnicornVPCPublicSubnet1DefaultRoute772099A7
+      - UnicornVPCPublicSubnet2DefaultRouteE4890189
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornFargateService/LB/Resource
+  UnicornFargateServiceLBSecurityGroup142DBFE7:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Automatically created Security Group for ELB UnicornIaCUnicornFargateServiceLBFC1748CF
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow from anyone on port 80
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: project
+          Value: unicorn
+      VpcId:
+        Ref: UnicornVPCF3838288
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornFargateService/LB/SecurityGroup/Resource
+  UnicornFargateServiceLBSecurityGrouptoUnicornIaCUnicornFargateServiceSecurityGroup05B800248080DFF17E7B:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      GroupId:
+        Fn::GetAtt:
+          - UnicornFargateServiceLBSecurityGroup142DBFE7
+          - GroupId
+      IpProtocol: tcp
+      Description: Load balancer to target
+      DestinationSecurityGroupId:
+        Fn::GetAtt:
+          - UnicornFargateServiceSecurityGroupBFC736BD
+          - GroupId
+      FromPort: 8080
+      ToPort: 8080
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornFargateService/LB/SecurityGroup/to UnicornIaCUnicornFargateServiceSecurityGroup05B80024:8080
+  UnicornFargateServiceLBPublicListener854989E4:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - TargetGroupArn:
+            Ref: UnicornFargateServiceLBPublicListenerECSGroup86E0B225
+          Type: forward
+      LoadBalancerArn:
+        Ref: UnicornFargateServiceLB9F2D10F0
+      Port: 80
+      Protocol: HTTP
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornFargateService/LB/PublicListener/Resource
+  UnicornFargateServiceLBPublicListenerECSGroup86E0B225:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: project
+          Value: unicorn
+      TargetType: ip
+      VpcId:
+        Ref: UnicornVPCF3838288
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornFargateService/LB/PublicListener/ECSGroup/Resource
+  UnicornFargateServiceTaskDefTaskRole8B7A0CFA:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: project
+          Value: unicorn
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornFargateService/TaskDef/TaskRole/Resource
+  UnicornFargateServiceTaskDefBD64E505:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Essential: true
+          Image: 057097267726.dkr.ecr.eu-west-1.amazonaws.com/unicorn
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Ref: UnicornFargateServiceTaskDefunicornLogGroup4BBEDC4D
+              awslogs-stream-prefix: UnicornFargateService
+              awslogs-region: eu-west-1
+          Name: unicorn
+          PortMappings:
+            - ContainerPort: 8080
+              Protocol: tcp
+      Cpu: "512"
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - ecsTaskExecutionRole34F54B99
+          - Arn
+      Family: UnicornIaCUnicornFargateServiceTaskDefA5B792B7
+      Memory: "1024"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: project
+          Value: unicorn
+      TaskRoleArn:
+        Fn::GetAtt:
+          - UnicornFargateServiceTaskDefTaskRole8B7A0CFA
+          - Arn
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornFargateService/TaskDef/Resource
+  UnicornFargateServiceTaskDefunicornLogGroup4BBEDC4D:
+    Type: AWS::Logs::LogGroup
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornFargateService/TaskDef/unicorn/LogGroup/Resource
+  UnicornFargateServiceB84838EB:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster:
+        Ref: UnicornCluster487CB41D
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      DesiredCount: 1
+      EnableECSManagedTags: false
+      HealthCheckGracePeriodSeconds: 60
+      LaunchType: FARGATE
+      LoadBalancers:
+        - ContainerName: unicorn
+          ContainerPort: 8080
+          TargetGroupArn:
+            Ref: UnicornFargateServiceLBPublicListenerECSGroup86E0B225
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - Fn::GetAtt:
+                - UnicornFargateServiceSecurityGroupBFC736BD
+                - GroupId
+          Subnets:
+            - Ref: UnicornVPCPrivateSubnet1Subnet13641B43
+            - Ref: UnicornVPCPrivateSubnet2Subnet922C27BA
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: project
+          Value: unicorn
+      TaskDefinition:
+        Ref: UnicornFargateServiceTaskDefBD64E505
+    DependsOn:
+      - UnicornFargateServiceLBPublicListenerECSGroup86E0B225
+      - UnicornFargateServiceLBPublicListener854989E4
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornFargateService/Service/Service
+  UnicornFargateServiceSecurityGroupBFC736BD:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: UnicornIaC/UnicornFargateService/Service/SecurityGroup
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      SecurityGroupIngress:
+        - CidrIp:
+            Fn::GetAtt:
+              - UnicornVPCF3838288
+              - CidrBlock
+          Description: Allow http inbound from VPC
+          FromPort: 8080
+          IpProtocol: tcp
+          ToPort: 8080
+      Tags:
+        - Key: bu
+          Value: cloud
+        - Key: environment
+          Value: prod
+        - Key: project
+          Value: unicorn
+      VpcId:
+        Ref: UnicornVPCF3838288
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornFargateService/Service/SecurityGroup/Resource
+  UnicornFargateServiceSecurityGroupfromUnicornIaCUnicornFargateServiceLBSecurityGroupB46AB5448080EC57FE95:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      Description: Load balancer to target
+      FromPort: 8080
+      GroupId:
+        Fn::GetAtt:
+          - UnicornFargateServiceSecurityGroupBFC736BD
+          - GroupId
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - UnicornFargateServiceLBSecurityGroup142DBFE7
+          - GroupId
+      ToPort: 8080
+    Metadata:
+      aws:cdk:path: UnicornIaC/UnicornFargateService/Service/SecurityGroup/from UnicornIaCUnicornFargateServiceLBSecurityGroupB46AB544:8080
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=1.44.0,@aws-cdk/assets=1.42.0,@aws-cdk/aws-apigateway=1.42.0,@aws-cdk/aws-applicationautoscaling=1.42.0,@aws-cdk/aws-autoscaling=1.42.0,@aws-cdk/aws-autoscaling-common=1.42.0,@aws-cdk/aws-autoscaling-hooktargets=1.42.0,@aws-cdk/aws-batch=1.42.0,@aws-cdk/aws-certificatemanager=1.42.0,@aws-cdk/aws-cloudformation=1.42.0,@aws-cdk/aws-cloudfront=1.42.0,@aws-cdk/aws-cloudwatch=1.42.0,@aws-cdk/aws-codebuild=1.42.0,@aws-cdk/aws-codecommit=1.42.0,@aws-cdk/aws-codepipeline=1.42.0,@aws-cdk/aws-cognito=1.42.0,@aws-cdk/aws-dynamodb=1.42.0,@aws-cdk/aws-ec2=1.42.0,@aws-cdk/aws-ecr=1.42.0,@aws-cdk/aws-ecr-assets=1.42.0,@aws-cdk/aws-ecs=1.42.0,@aws-cdk/aws-ecs-patterns=1.42.0,@aws-cdk/aws-elasticloadbalancing=1.42.0,@aws-cdk/aws-elasticloadbalancingv2=1.42.0,@aws-cdk/aws-events=1.42.0,@aws-cdk/aws-events-targets=1.42.0,@aws-cdk/aws-iam=1.42.0,@aws-cdk/aws-kms=1.42.0,@aws-cdk/aws-lambda=1.42.0,@aws-cdk/aws-logs=1.42.0,@aws-cdk/aws-route53=1.42.0,@aws-cdk/aws-route53-targets=1.42.0,@aws-cdk/aws-s3=1.42.0,@aws-cdk/aws-s3-assets=1.42.0,@aws-cdk/aws-sam=1.42.0,@aws-cdk/aws-secretsmanager=1.42.0,@aws-cdk/aws-servicediscovery=1.42.0,@aws-cdk/aws-sns=1.42.0,@aws-cdk/aws-sns-subscriptions=1.42.0,@aws-cdk/aws-sqs=1.42.0,@aws-cdk/aws-ssm=1.42.0,@aws-cdk/aws-stepfunctions=1.42.0,@aws-cdk/cdk-assets-schema=1.42.0,@aws-cdk/cloud-assembly-schema=1.42.0,@aws-cdk/core=1.42.0,@aws-cdk/custom-resources=1.42.0,@aws-cdk/cx-api=1.42.0,@aws-cdk/region-info=1.42.0,jsii-runtime=Python/3.7.3
+Parameters:
+  SsmParameterValueawsserviceamiamazonlinuxlatestamznamihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/amzn-ami-hvm-x86_64-gp2
+Outputs:
+  UnicornFargateServiceLoadBalancerDNS5B2B3BB2:
+    Value:
+      Fn::GetAtt:
+        - UnicornFargateServiceLB9F2D10F0
+        - DNSName
+  UnicornFargateServiceServiceURL462F6310:
+    Value:
+      Fn::Join:
+        - ""
+        - - http://
+          - Fn::GetAtt:
+              - UnicornFargateServiceLB9F2D10F0
+              - DNSName
+

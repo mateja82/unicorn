@@ -1,20 +1,9 @@
 <!--votes.html-->
 
-
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
-
-
 <!DOCTYPE html>
 <html lang="en">
-      <!--If there's an error, display the error-->
-      {{ if .ErrorTitle}}
-      <p class="bg-danger">
-        {{.ErrorTitle}}: {{.ErrorMessage}}
-      </p>
-      {{end}}
-      <!--Create a form that POSTs to the `/u/login` route-->
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -29,6 +18,7 @@
             margin: 0;
             padding: 0;
             text-align: center;
+            font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
         }
 
         .center-fit {
@@ -46,34 +36,39 @@
         font-size: 9px !important;
         overflow-x: scroll;
       }
+      .para p{
+        font-size: 18px;
+      }
+      .all_page{
+        background: url('https://i.postimg.cc/j29nhLfw/cover.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
     </style>
 </head>
 
 <body>
-
-{{ if .ErrorTitle}}
-<p class="bg-danger">
-  {{.ErrorTitle}}: {{.ErrorMessage}}
-</p>
-{{end}}
-
-<h3 class="ui header">Check out "My Votes" section to see how you've voted</h3>
-<div class="imgbox">
-    <img src="https://i.postimg.cc/vTVhdZxp/element5-digital-T9-CXBZLUvic-unsplash.jpg" alt="Votes" class="center-fit" >
+  <div class="all_page">
+    <h3 class="ui header">Check out "My Votes" section to see how you've voted</h3>
+    <div class="imgbox">
+        <img src="https://i.postimg.cc/Z5PFJx3w/vote.png" alt="Votes" class="center-fit" >
+      </div>
+    <br>
+    <div class="para">
+      <p>{{.voted1}}</p>
+      <br>
+      <p>{{.voted2}}</p>
+      <br>
+      <p>{{.voted3}}</p>
+      <br>
+      <p>{{.voted4}}</p>
+      <br>
+      <p>{{.voted5}}</p>
+      <br>
+    </div>  
   </div>
-
-<br>
-<p>{{.voted1}}</p>
-<br>
-<p>{{.voted2}}</p>
-<br>
-<p>{{.voted3}}</p>
-<br>
-<p>{{.voted4}}</p>
-<br>
-<p>{{.voted5}}</p>
-<br>
 </body>
-</html>>
+</html>
 <!--Embed the footer.html template at this location-->
 {{ template "footer.html" .}}

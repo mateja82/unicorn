@@ -1,18 +1,23 @@
-<!--index.html-->
-
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
-
 <!DOCTYPE html>
 <html lang="en">
-      <!--If there's an error, display the error-->
-      {{ if .ErrorTitle}}
-      <p class="bg-danger">
-        {{.ErrorTitle}}: {{.ErrorMessage}}
-      </p>
-      {{end}}
-      <!--Create a form that POSTs to the `/u/login` route-->
-
+  <head>
+    <style>
+      .myDiv {
+        text-align: center;
+      }
+      </style>
+    <!--Use the `title` variable to set the title of the page-->
+    <title>{{ .title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">    
+    <!--Use bootstrap to make the application look decent-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script async src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  </head>
+  <body class="container">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -27,8 +32,26 @@
             margin: 0;
             padding: 0;
             text-align: center;
+            font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
         }
-
+        a{
+            text-decoration: none;
+        }
+        .div-block .img{
+            width: 15%;
+            height: 50%;
+            /* display: inline-block; */
+            float: right;
+        }
+        .div-block img.img-thumbnail.rounded.mx-auto.d-block.img-fluid{
+            height: 100px;
+            width: 150px;
+        }
+        .inner-div-block{
+            width: 85%;
+            display: inline-block;
+            color: #000000
+        }
         .center-fit {
             max-width: 500px;
             width: 100%;
@@ -43,6 +66,46 @@
       code {
         font-size: 9px !important;
         overflow-x: scroll;
+      }
+      .div-block a h2{
+        text-align: left;
+        margin-bottom: 5px;
+      }
+      .div-block a{
+        float: left;
+      }
+      .div-block p,.div-block h2{
+        text-align: left;
+      }
+      .div-block{
+        position: relative;
+        padding: 10px 7px 20px;
+        margin-bottom: 25px;
+        text-align: left;
+        box-shadow: 10px 12px 30px 5px #ddd;
+      }
+      .div-block:before{
+        content: "";
+        position: absolute;
+        display: block;
+        width: 1px;
+        height: 117%;
+        background-color: #EEE;
+        left: 0px;
+        top: 0px;
+        transition: .4s all ease-in-out;
+        z-index: -1;
+      }
+      .div-block:hover:before{
+        width: 100%;
+      }
+      @media (max-width: 425px) {
+        .inner-div-block{
+          width: 57%;
+        }
+        .div-block .img{
+          width: 43%;
+        }
       }
     </style>
 </head>
@@ -61,14 +124,23 @@
 </body>
 
 {{range .payload }}
-<a href="/project/view/{{.ID}}">
-<!--Display the title of the project -->
 <hr>
-  <h2>{{.Title}}</h2>
-  </a>
-    <!--Display the content of the project-->
-    <p>Proposed by: {{.Owner}}</p>
-    <p>Description: {{.Content}}</p>
+<div class="div-block">
+  <div class="inner-div-block">
+      <!--Display the title of the project -->
+        <h2>{{.Title}}</h2>
+        <!--Display the content of the project-->
+        <p>Proposed by: {{.Owner}}</p>
+        <p>Description: {{.Content}}</p>
+        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Click for more info </a>      
+  </div>
+    <div class="img">
+      <img 
+      src="{{.Photo}}" 
+      alt="" 
+      class="img-thumbnail rounded mx-auto d-block img-fluid">
+    </div>
+</div>
 {{end}}
 
 <script
@@ -94,6 +166,5 @@ if (document.location.search.includes("authres")) {
 }
 </script>
 </html>
-
 <!--Embed the footer.html template at this location-->
 {{ template "footer.html" .}}
