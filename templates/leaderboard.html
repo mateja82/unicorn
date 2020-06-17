@@ -1,16 +1,7 @@
-<!--leaderboard.html-->
-
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
 <!DOCTYPE html>
 <html lang="en">
-      <!--If there's an error, display the error-->
-      {{ if .ErrorTitle}}
-      <p class="bg-danger">
-        {{.ErrorTitle}}: {{.ErrorMessage}}
-      </p>
-      {{end}}
-      <!--Create a form that POSTs to the `/u/login` route-->
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -19,14 +10,49 @@
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
   />
+  <script
+  src="https://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>
+
+  <link 
+  rel="stylesheet" 
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
+  integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" 
+  crossorigin="anonymous">
+    <script async 
+    src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
+    integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
+    crossorigin="anonymous">
+  </script>
   <title>Welcome to Unicorn Pursuit</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            text-align: center;
+        *{
+          margin: 0;
+          padding: 0;
+          text-align: center;
+          font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
         }
-
+        a{
+            text-decoration: none;
+        }
+        .div-block{
+            text-align: left;
+        }
+        .div-block .img{
+            width: 15%;
+            height: 50%;
+            /* display: inline-block; */
+            float: right;
+        }
+        .div-block img.img-thumbnail.rounded.mx-auto.d-block.img-fluid{
+            height: 100px;
+            width: 150px;
+        }
+        .inner-div-block{
+            width: 85%;
+            display: inline-block;
+        }
         .center-fit {
             max-width: 500px;
             width: 100%;
@@ -38,35 +64,106 @@
         align-items: center;
         justify-content: center;
       }
+      .all_page{
+          background: url('https://i.postimg.cc/j29nhLfw/cover.jpg');
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-color: #fff;
+          /* padding: 6.9rem 0; */
+        }
+        .div-block a{
+        float: left;
+      }
+      .div-block p,.div-block h2{
+        text-align: left;
+      }
       code {
         font-size: 9px !important;
         overflow-x: scroll;
+      }
+      
+      .div-block a{
+        text-decoration: none;
+      }
+      .div-block a h2{
+        text-align: left;
+        margin-bottom: 5px;
+      }
+      .div-block p{
+        text-align: left;
+      }
+      .div-block{
+        position: relative;
+        padding: 10px 7px 20px;
+        margin-bottom: 25px;
+        text-align: left;
+        box-shadow: 10px 12px 30px 5px #ddd;
+        z-index: 1;
+      }
+      .div-block:before{
+        content: "";
+        position: absolute;
+        display: block;
+        width: 1px;
+        height: 117%;
+        background-color: #EEE;
+        left: 0px;
+        top: 0px;
+        transition: .4s all ease-in-out;
+        z-index: -1;
+      }
+      .div-block:hover:before{
+        width: 100%;
+      }
+      @media (max-width: 425px) {
+        .inner-div-block{
+          width: 57%;
+        }
+        .div-block .img{
+          width: 43%;
+        }
       }
     </style>
 </head>
 
 <body>
-  <h2 class="ui header">Are your favorites winning?</h2>
-<div class="imgbox">
-    <img src="https://i.postimg.cc/1zF3wx6y/pietro-mattia-z-Xqiz-Kxnb-BU-unsplash.jpg" alt="Unicorn Pursuit" class="center-fit" >
-  </div>
-  <h3>
-    Find the submitted projects, ranked by votes, below. The race is long, things still might change.
-  </h3>
+  <div class="all_page">
+    <div class="cover-block">
+      <h2 class="ui header">Are your favorites winning?</h2>
+      <div class="imgbox">
+          <img src="https://i.postimg.cc/1zF3wx6y/pietro-mattia-z-Xqiz-Kxnb-BU-unsplash.jpg" alt="Unicorn Pursuit" class="center-fit" >
+        </div>
+        <h3>
+          Find the submitted projects, ranked by votes, below. The race is long, things still might change.
+        </h3>
 
-  <!--Loop over the `payload` variable, which is the list of projects-->
-  {{range .payload }}
-    <!--Create the link for the project based on its ID-->
-    <a href="/project/view/{{.ID}}">
-      <hr>
-      <!--Display the title of the project -->
-      <h2>{{.Title}}</h2>
-    </a>
-    <!--Display the content of the project-->
-    <p>Proposed by: {{.Owner}}</p>
-    <p>Number of Votes: {{.Votes}}</p>
-  {{end}}
+      <!-- cover-block -->
+    </div>
+    <!-- all page -->
+  </div>
+          {{range .payload }}
+          <hr>
+
+          <div class="div-block">
+            <div class="inner-div-block">
+                <!--Display the title of the project -->
+                  <h2>{{.Title}}</h2>
+                  <!--Display the content of the project-->
+                  <p>Proposed by: {{.Owner}}</p>
+                  <p>Current number of Votes: {{.Votes}}</p>
+                  <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>      
+            </div>
+              <div class="img">
+                <img 
+                src="{{.Photo}}" 
+                alt=""
+                class="img-thumbnail rounded mx-auto d-block img-fluid">
+              </div>
+          </div>
+          {{end}}
 </body>
 </html>
+<!--Embed the footer.html template at this location-->
 <!--Embed the footer.html template at this location-->
 {{ template "footer.html" .}}

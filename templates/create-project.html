@@ -1,16 +1,7 @@
-<!--create-project.html-->
-
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
 <!DOCTYPE html>
 <html lang="en">
-      <!--If there's an error, display the error-->
-      {{ if .ErrorTitle}}
-      <p class="bg-danger">
-        {{.ErrorTitle}}: {{.ErrorMessage}}
-      </p>
-      {{end}}
-      <!--Create a form that POSTs to the `/u/login` route-->
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -29,6 +20,14 @@
       code {
         font-size: 9px !important;
         overflow-x: scroll;
+      }
+      /* input{
+        border-image: linear-gradient(to right,#0971b7, #d6351e,#0971b7);
+        border-image-slice: 1;
+        background: #ddf;
+      } */
+      .panel.panel-default.col-sm-12{
+        box-shadow: 10px 8px 30px 5px #ddd;
       }
     </style>
 </head>
@@ -62,3 +61,5 @@
 </div>  
 </body>
 </html>
+<!--Embed the footer.html template at this location-->
+{{ template "footer.html" .}}

@@ -1,39 +1,58 @@
 <!--menu.html-->
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-expand-lg navbar-light bg-color fixed-top">
   <div class="container">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="/">
-        Unicorn Home
-      </a>
+    <a class="navbar-brand" href="/">
+      <div class="logo-header">
+        <img src="https://i.postimg.cc/BbRqXDW6/output-onlinepngtools.png" alt="Unicorn Home">
+      </div>
+    </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            {{ if .is_logged_in }}
+            <!--Display this link only when the user is logged in-->
+            <a class="nav-link" href="/project/create">New project <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            {{end}} 
+            {{ if not .is_logged_in }}
+              <!--Display this link only when the user is not logged in-->
+            <a class="nav-link" href="/u/register">Register</a>
+          </li>
+          <li class="nav-item">
+            {{end}} 
+            {{ if not .is_logged_in }}
+              <!--Display this link only when the user is not logged in-->
+            <a class="nav-link" href="/u/login">Login</a>
+          </li>
+          <li class="nav-item">
+            {{end}} 
+            {{ if .is_logged_in }}
+              <!--Display this link only when the user is logged in-->
+            <a class="nav-link" href="/g/leaderboard" tabindex="-1" aria-disabled="true">Leaderboard</a>
+          </li>
+          <li class="nav-item">
+            {{end}} 
+            {{ if .is_logged_in }}
+            <!--Display this link only when the user is logged in-->
+          <a class="nav-link" href="/project/votes" tabindex="-1" aria-disabled="true">My Votes</a>
+        </li>
+        {{end}} 
+        <li class="nav-item">
+            <!--Display always-->
+          <a class="nav-link" href="/g/about" tabindex="-1" aria-disabled="true">About Unicorn</a>
+        </li>
+        <li class="nav-item">
+          {{ if .is_logged_in }}
+            <!--Display this link only when the user is logged in-->
+          <a class="nav-link" href="/u/logout" tabindex="-1" aria-disabled="true">Logout</a>
+        </li >
+        {{end}}
+      </ul>
     </div>
-    <ul class="nav navbar-nav">
-      {{ if .is_logged_in }}
-        <!--Display this link only when the user is logged in-->
-        <li><a href="/project/create">New Project</a></li>
-      {{end}} 
-      {{ if not .is_logged_in }}
-        <!--Display this link only when the user is not logged in-->
-        <li><a href="/u/register">Register</a></li>
-      {{end}} 
-      {{ if not .is_logged_in }}
-        <!--Display this link only when the user is not logged in-->
-        <li><a href="/u/login">Login</a></li>
-      {{end}} 
-      {{ if .is_logged_in }}
-        <!--Display this link only when the user is logged in-->
-        <li><a href="/g/leaderboard">Leaderboard</a></li>
-      {{end}}
-      {{ if .is_logged_in }}
-      <!--Display this link only when the user is logged in-->
-      <li><a href="/project/votes">My Votes</a></li>
-      {{end}}
-        <!--Display always-->
-        <li><a href="/g/about">About Unicorn</a></li>
-      {{ if .is_logged_in }}
-        <!--Display this link only when the user is logged in-->
-        <li><a href="/u/logout">Logout</a></li>
-      {{end}}
-    </ul>
   </div>
 </nav>

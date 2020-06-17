@@ -17,8 +17,6 @@ class IacStack(core.Stack):
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-
-
         # Let's start with creating an IAM Service Role, later to be assumed by our ECS Fargate Container
         # After creating any resource, we'll be attaching IAM policies to this role using the `fargate_role`.
         fargate_role = iam.Role(
@@ -27,7 +25,6 @@ class IacStack(core.Stack):
             role_name="ecsTaskExecutionRole",
             assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
             description="Custom Role assumed by ECS Fargate (container)"
-
         )
 
         # S3: Create a Bucket for Unicorn Pursuit web page, and grant public read:
@@ -149,7 +146,54 @@ class IacStack(core.Stack):
         ))
 
         ## Fargate: Create ECS:Fargate with ECR uploaded image
-        vpc = ec2.Vpc(self, "UnicornVPC", max_azs=2)
+        vpc = ec2.Vpc(self, "UnicornVPC", max_azs=2, nat_gateways=None)
+
+        """   VPC with optimal NAT GW usage
+        vpc_lowcost = ec2.Vpc(self, "LowCostVPC",
+            max_azs=2,
+            cidr="10.7.0.0/16",
+            nat_gateways=None,
+            subnet_configuration=[ec2.SubnetConfiguration(
+                               subnet_type=ec2.SubnetType.PUBLIC,
+                               name="Public",
+                               cidr_mask=24,
+                           ), ec2.SubnetConfiguration(
+                               subnet_type=ec2.SubnetType.ISOLATED,
+                               name="Private",
+                               cidr_mask=24,
+                           )
+                           ],     
+        ) """
+        
+        linux_ami = ec2.AmazonLinuxImage(generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX,
+                                 edition=ec2.AmazonLinuxEdition.STANDARD,
+                                 virtualization=ec2.AmazonLinuxVirt.HVM,
+                                 storage=ec2.AmazonLinuxStorage.GENERAL_PURPOSE
+                                 )
+
+        nat_ec2 = ec2.Instance(self, "NAT", 
+            instance_name="NAT",
+            vpc=vpc,
+            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
+            instance_type=ec2.InstanceType(instance_type_identifier="t3.nano"),
+            machine_image=linux_ami,
+            user_data=ec2.UserData.for_linux(),
+            source_dest_check=False,
+        )
+
+        # Configure Linux Instance to act as NAT Instance
+        nat_ec2.user_data.add_commands("sysctl -w net.ipv4.ip_forward=1")
+        nat_ec2.user_data.add_commands("/sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE")
+
+        # Add a static route to the ISOLATED subnet, pointing 0.0.0.0/0 to a NAT EC2
+        selection = vpc.select_subnets(
+            subnet_type=ec2.SubnetType.PRIVATE
+        )
+    
+        for subnet in selection.subnets:
+            subnet.add_route("DefaultNAT", router_id=nat_ec2.instance_id, router_type=ec2.RouterType.INSTANCE, destination_cidr_block="0.0.0.0/0") 
+
+        # Create ECS Cluster
         cluster = ecs.Cluster(self, "UnicornCluster", vpc=vpc)
         ecr.Repository(self, "unicorn", repository_name="unicorn")
 
@@ -173,6 +217,13 @@ class IacStack(core.Stack):
             peer = ec2.Peer.ipv4(vpc.vpc_cidr_block),
             connection = ec2.Port.tcp(8080),
             description="Allow http inbound from VPC"
+        )
+
+        # Update NAT EC2 Security Group, to allow only HTTPS from Fargate Service Security Group.
+        nat_ec2.connections.security_groups[0].add_ingress_rule(
+            peer = fargate_service.service.connections.security_groups[0],
+            connection = ec2.Port.tcp(443),
+            description="Allow https from Fargate Service"
         )
 
         # Grant ECR Access to Fargate by attaching an existing ReadOnly policy. so that Unicorn Docker Image can be pulled.
