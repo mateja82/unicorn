@@ -1,8 +1,4 @@
 <!--footer.html-->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 <style>
   *{
     margin: 0;
@@ -27,7 +23,7 @@
   #footer .upper-icons li{
     float: left;
     font-size: 30px;
-    padding: 2px 5px;
+    padding: 5px 5px;
     margin-left: 5px;
     cursor: pointer;
   }
@@ -66,30 +62,44 @@
   .inner-footer a:hover{
     color: #005dff;
   }
+  .footer-img {
+    /* display: flex; */
+    float: left;
+}
+.footer-cont {
+    clear: both;
+}
   </style>
-</head>
-<body>
-  <footer id="footer">
-    <div class="container-fluid ">
-      <div class="row-fluid content-row">
-        <div class="inner-footer">
-          <div class="upper-footer">
-            <a href="/"><img src="https://i.postimg.cc/BbRqXDW6/output-onlinepngtools.png" alt="Unicorn Pursui" width="55px"></a>
-            <ul class="upper-icons">
-              <li class="upper-list-items"><i class="fa fa-twitter"></i></li>
-              <li class="upper-list-items"><i class="fa fa-github"></i></li>
-            </ul>
-          </div>
-          <ul class="footer-list">
-            <hr>
-            <li class="list-items"><p> Design and Implementation 2020 by MatsCloud.COM, All Rights Reserved. | <a href="https://www.matscloud.com/docs/unicorn-project/workshop/">Check out our Cloud Workshop!</a></p></li>
-          </ul>
-          <br>
-          <div class="footer-spacer"></div>
-        </div>
-      </div>  
-    </div>    
-	</footer>  
-  
+    <footer id="footer">
+        <div class="container-fluid ">
+            <div class="row-fluid content-row">
+                <div class="inner-footer">
+                    <div class="upper-footer">
+                        <div class="footer-img">
+                        <a href="index.html"><img src="https://i.postimg.cc/BbRqXDW6/output-onlinepngtools.png" alt="Unicorn Pursui" width="55px"></a>   
+                        </div>
+                        <ul class="upper-icons">
+                        <li class="upper-list-items"><i class="fab fa-twitter"></i></li>
+                        <li class="upper-list-items"><i class="fab fa-github"></i></li>
+                        </ul>
+                    </div>
+                    <div class="footer-cont">
+                    <ul class="footer-list">
+                        <hr>
+                        <li class="list-items"><p> Design and Implementation 2020 by MatsCloud.COM, All Rights Reserved. | <a href="https://www.matscloud.com/docs/unicorn-project/workshop/">Check out our Cloud Workshop!</a></p></li>
+                    </ul>
+                    <br>
+                    <div class="footer-spacer"></div>   
+                    </div> 
+                </div>  
+            </div>
+        </div>        
+    </footer>  
+    <script
+src="https://code.jquery.com/jquery-3.1.1.min.js"
+integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+crossorigin="anonymous"
+></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>  
 </body>
 </html>
