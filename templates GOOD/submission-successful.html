@@ -1,0 +1,13 @@
+<!--submission-successful.html-->
+
+<!--Embed the header.html template at this location-->
+{{ template "header.html" .}}
+
+<div>
+  <strong>Your project was successfully submitted. Good luck! </strong>
+  
+  <!--Display the linked title of the newly created project-->
+  <a href="/project/view/{{.payload.ID}}">{{.payload.Title}}</a>
+</div>
+<!--Embed the footer.html template at this location-->
+{{ template "footer.html" .}}
