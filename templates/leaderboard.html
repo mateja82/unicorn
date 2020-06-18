@@ -1,31 +1,4 @@
-<!--Embed the header.html template at this location-->
-{{ template "header.html" .}}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
-  />
-  <script
-  src="https://code.jquery.com/jquery-2.2.4.min.js"
-  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-  crossorigin="anonymous"></script>
 
-  <link 
-  rel="stylesheet" 
-  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
-  integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" 
-  crossorigin="anonymous">
-    <script async 
-    src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
-    integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
-    crossorigin="anonymous">
-  </script>
-  <title>Welcome to Unicorn Pursuit</title>
     <style>
         *{
           margin: 0;
@@ -64,6 +37,9 @@
         align-items: center;
         justify-content: center;
       }
+      .cover-block {
+        padding: 22px 0px 22px;
+    }
       .all_page{
           background: url('https://i.postimg.cc/j29nhLfw/cover.jpg');
           background-size: cover;
@@ -123,6 +99,9 @@
         .div-block .img{
           width: 43%;
         }
+        .div-block img.img-thumbnail.rounded.mx-auto.d-block.img-fluid{
+          height: 120px;
+        }
       }
     </style>
 </head>
@@ -137,33 +116,168 @@
         <h3>
           Find the submitted projects, ranked by votes, below. The race is long, things still might change.
         </h3>
-
-      <!-- cover-block -->
-    </div>
-    <!-- all page -->
-  </div>
-          {{range .payload }}
-          <hr>
-
+        <div class="container">
           <div class="div-block">
             <div class="inner-div-block">
                 <!--Display the title of the project -->
                   <h2>{{.Title}}</h2>
                   <!--Display the content of the project-->
                   <p>Proposed by: {{.Owner}}</p>
-                  <p>Current number of Votes: {{.Votes}}</p>
+                  <p>Description: {{.Content}}</p>
                   <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>      
             </div>
               <div class="img">
                 <img 
-                src="{{.Photo}}" 
-                alt=""
+                src="https://i.postimg.cc/sgMZ1PtY/banner-1.jpg" 
+                alt="" 
                 class="img-thumbnail rounded mx-auto d-block img-fluid">
               </div>
           </div>
-          {{end}}
-</body>
-</html>
+          
+          <hr>
+          
+          <div class="div-block">
+            
+              <div class="inner-div-block">
+                  <!--Display the title of the project -->
+                  <h2>{{.Title}}</h2>
+                  <!--Display the content of the project-->
+                  <p>Proposed by: {{.Owner}}</p>
+                  <p>Description: {{.Content}}</p>
+                  <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+                </div>
+              <div class="img"><img src="https://i.postimg.cc/zXcymbVV/banner-8.png" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+          </div>
+          
+          <hr>
+          
+          <div class="div-block">
+              <div class="inner-div-block">
+                  <!--Display the title of the project -->
+                  <h2>{{.Title}}</h2>
+                  <!--Display the content of the project-->
+                  <p>Proposed by: {{.Owner}}</p>
+                  <p>Description: {{.Content}}</p>
+                  <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+                </div>
+              <div class="img"><img src="https://i.postimg.cc/NfSjJ3zX/banner-3.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+          </div>
+          
+          <hr>
+          
+          <div class="div-block">
+              <div class="inner-div-block">
+                  <!--Display the title of the project -->
+                  <h2>{{.Title}}</h2>
+                  <!--Display the content of the project-->
+                  <p>Proposed by: {{.Owner}}</p>
+                  <p>Description: {{.Content}}</p>
+                  <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+                </div>
+              <div class="img"><img src="https://i.postimg.cc/htVcCfxF/banner-4.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+          </div>
+          
+          <hr>
+          
+          <div class="div-block">
+              <div class="inner-div-block">
+                  <!--Display the title of the project -->
+                  <h2>{{.Title}}</h2>
+                  <!--Display the content of the project-->
+                  <p>Proposed by: {{.Owner}}</p>
+                  <p>Description: {{.Content}}</p>
+                  <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+                </div>
+              <div class="img"><img src="https://i.postimg.cc/Znv1CMxk/bikes.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+          </div>
+          
+          <hr>
+          
+          <div class="div-block">
+              <div class="inner-div-block">
+                  <!--Display the title of the project -->
+                  <h2>{{.Title}}</h2>
+                  <!--Display the content of the project-->
+                  <p>Proposed by: {{.Owner}}</p>
+                  <p>Description: {{.Content}}</p>
+                  <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+                </div>
+              <div class="img"><img src="https://i.postimg.cc/RZTVSW07/banner-7.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+          </div>
+          
+          <hr>
+          
+          <div class="div-block">
+            <div class="inner-div-block">
+                <!--Display the title of the project -->
+                <h2>{{.Title}}</h2>
+                <!--Display the content of the project-->
+                <p>Proposed by: {{.Owner}}</p>
+                <p>Description: {{.Content}}</p>
+                <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+              </div>
+            <div class="img"><img src="https://i.postimg.cc/zXcymbVV/banner-8.png" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+            
+          </div>
+          
+          <hr>
+          
+          <div class="div-block">
+              <div class="inner-div-block">
+                  <!--Display the title of the project -->
+                  <h2>{{.Title}}</h2>
+                  <!--Display the content of the project-->
+                  <p>Proposed by: {{.Owner}}</p>
+                  <p>Description: {{.Content}}</p>
+                  <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+                </div>
+              <div class="img"><img src="https://i.postimg.cc/htVcCfxF/banner-4.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+          </div>
+          
+          <hr>
+          
+          <div class="div-block">
+            <div class="inner-div-block">
+                <!--Display the title of the project -->
+                <h2>{{.Title}}</h2>
+                <!--Display the content of the project-->
+                <p>Proposed by: {{.Owner}}</p>
+                <p>Description: {{.Content}}</p>
+                <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+              </div>
+            <div class="img"><img src="https://i.postimg.cc/htVcCfxF/banner-4.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+          </div>
+          
+          <hr>
+          
+          <div class="div-block">
+              <div class="inner-div-block">
+                  <!--Display the title of the project -->
+                  <h2>{{.Title}}</h2>
+                  <!--Display the content of the project-->
+                  <p>Proposed by: {{.Owner}}</p>
+                  <p>Description: {{.Content}}</p>
+                  <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+                </div>
+              <div class="img"><img src="https://i.postimg.cc/zXcymbVV/banner-8.png" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+          </div>
+      </div>
+        <!--Loop over the `payload` variable, which is the list of projects-->
+        <!-- {{range .payload }} -->
+          <!--Create the link for the project based on its ID-->
+          <!-- <div class="div-block">
+          <a href="/project/view/{{.ID}}">
+            <hr> -->
+            <!--Display the title of the project -->
+            <!-- <h2>{{.Title}}</h2> -->
+          <!-- </a> -->
+          <!--Display the content of the project-->
+          <!-- <p>Proposed by: {{.Owner}}</p>
+          <p>Number of Votes: {{.Votes}}</p>
+        </div>
+        {{end}} --> 
+      <!-- cover-block -->
+    </div>
+    <!-- all page -->
+  </div>
 <!--Embed the footer.html template at this location-->
-<!--Embed the footer.html template at this location-->
-{{ template "footer.html" .}}

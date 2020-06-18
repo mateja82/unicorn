@@ -1,33 +1,4 @@
-<!--Embed the header.html template at this location-->
-{{ template "header.html" .}}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <style>
-      .myDiv {
-        text-align: center;
-      }
-      </style>
-    <!--Use the `title` variable to set the title of the page-->
-    <title>{{ .title }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta charset="UTF-8">    
-    <!--Use bootstrap to make the application look decent-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <script async src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-  </head>
-  <body class="container">
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
-  />
-  <title>Welcome to Unicorn Pursuit</title>
-    <style>
+<style>
         * {
             margin: 0;
             padding: 0;
@@ -106,11 +77,11 @@
         .div-block .img{
           width: 43%;
         }
+        .div-block img.img-thumbnail.rounded.mx-auto.d-block.img-fluid{
+          height: 120px;
+        }
       }
     </style>
-</head>
-
-<body>
   <h2 class="ui header">Welcome to Unicorn Pursuit</h2>
 <div class="imgbox">
     <img src="https://g.foolcdn.com/editorial/images/550276/unicorn-wearing-i-love-unicorns-sweater-standing-in-front-of-a-rainbow.jpg" alt="Unicorn Pursuit" class="center-fit" >
@@ -122,36 +93,168 @@
     Once you Register/Login, you will be able to check them out, and vote for the ones you like most.
   </h3>
 </body>
-
-{{range .payload }}
-<hr>
-<div class="div-block">
+<div class="container">
+      <div class="div-block">
   <div class="inner-div-block">
       <!--Display the title of the project -->
         <h2>{{.Title}}</h2>
         <!--Display the content of the project-->
         <p>Proposed by: {{.Owner}}</p>
         <p>Description: {{.Content}}</p>
-        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Click for more info </a>      
+        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>      
   </div>
     <div class="img">
       <img 
-      src="{{.Photo}}" 
+      src="https://i.postimg.cc/sgMZ1PtY/banner-1.jpg" 
       alt="" 
       class="img-thumbnail rounded mx-auto d-block img-fluid">
     </div>
 </div>
-{{end}}
 
-<script
-src="https://code.jquery.com/jquery-3.1.1.min.js"
-integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-crossorigin="anonymous"
-></script>
-<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<hr>
+
+<div class="div-block">
+  
+    <div class="inner-div-block">
+        <!--Display the title of the project -->
+        <h2>{{.Title}}</h2>
+        <!--Display the content of the project-->
+        <p>Proposed by: {{.Owner}}</p>
+        <p>Description: {{.Content}}</p>
+        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+      </div>
+    <div class="img"><img src="https://i.postimg.cc/zXcymbVV/banner-8.png" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+</div>
+
+<hr>
+
+<div class="div-block">
+    <div class="inner-div-block">
+        <!--Display the title of the project -->
+        <h2>{{.Title}}</h2>
+        <!--Display the content of the project-->
+        <p>Proposed by: {{.Owner}}</p>
+        <p>Description: {{.Content}}</p>
+        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+      </div>
+    <div class="img"><img src="https://i.postimg.cc/NfSjJ3zX/banner-3.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+</div>
+
+<hr>
+
+<div class="div-block">
+    <div class="inner-div-block">
+        <!--Display the title of the project -->
+        <h2>{{.Title}}</h2>
+        <!--Display the content of the project-->
+        <p>Proposed by: {{.Owner}}</p>
+        <p>Description: {{.Content}}</p>
+        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+      </div>
+    <div class="img"><img src="https://i.postimg.cc/htVcCfxF/banner-4.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+</div>
+
+<hr>
+
+<div class="div-block">
+    <div class="inner-div-block">
+        <!--Display the title of the project -->
+        <h2>{{.Title}}</h2>
+        <!--Display the content of the project-->
+        <p>Proposed by: {{.Owner}}</p>
+        <p>Description: {{.Content}}</p>
+        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+      </div>
+    <div class="img"><img src="https://i.postimg.cc/Znv1CMxk/bikes.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+</div>
+
+<hr>
+
+<div class="div-block">
+    <div class="inner-div-block">
+        <!--Display the title of the project -->
+        <h2>{{.Title}}</h2>
+        <!--Display the content of the project-->
+        <p>Proposed by: {{.Owner}}</p>
+        <p>Description: {{.Content}}</p>
+        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+      </div>
+    <div class="img"><img src="https://i.postimg.cc/RZTVSW07/banner-7.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+</div>
+
+<hr>
+
+<div class="div-block">
+  <div class="inner-div-block">
+      <!--Display the title of the project -->
+      <h2>{{.Title}}</h2>
+      <!--Display the content of the project-->
+      <p>Proposed by: {{.Owner}}</p>
+      <p>Description: {{.Content}}</p>
+      <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+    </div>
+  <div class="img"><img src="https://i.postimg.cc/zXcymbVV/banner-8.png" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+  
+</div>
+
+<hr>
+
+<div class="div-block">
+    <div class="inner-div-block">
+        <!--Display the title of the project -->
+        <h2>{{.Title}}</h2>
+        <!--Display the content of the project-->
+        <p>Proposed by: {{.Owner}}</p>
+        <p>Description: {{.Content}}</p>
+        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+      </div>
+    <div class="img"><img src="https://i.postimg.cc/htVcCfxF/banner-4.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+</div>
+
+<hr>
+
+<div class="div-block">
+  <div class="inner-div-block">
+      <!--Display the title of the project -->
+      <h2>{{.Title}}</h2>
+      <!--Display the content of the project-->
+      <p>Proposed by: {{.Owner}}</p>
+      <p>Description: {{.Content}}</p>
+      <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+    </div>
+  <div class="img"><img src="https://i.postimg.cc/htVcCfxF/banner-4.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+</div>
+
+<hr>
+
+<div class="div-block">
+    <div class="inner-div-block">
+        <!--Display the title of the project -->
+        <h2>{{.Title}}</h2>
+        <!--Display the content of the project-->
+        <p>Proposed by: {{.Owner}}</p>
+        <p>Description: {{.Content}}</p>
+        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+      </div>
+    <div class="img"><img src="https://i.postimg.cc/zXcymbVV/banner-8.png" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+</div>
+<!-- {{range .payload }} -->
+<!-- <div class="div-block">
+  <a href="/project/view/{{.ID}}"> -->
+    <!--Display the title of the project -->
+    <!-- <hr>
+      <h2>{{.Title}}</h2>
+      </a>
+        Display the content of the project -->
+        <!-- <p>Proposed by: {{.Owner}}</p>
+        <p>Description: {{.Content}}</p>
+</div>
+{{end}} -->
+</div>
+
+
 <script>
 $(".ui.accordion").accordion();
-
 if (document.location.search.includes("error")) {
   const m = document.getElementById("message");
   m.style.display = "block";
@@ -165,6 +268,4 @@ if (document.location.search.includes("authres")) {
   m.textContent = decodeURI(err);
 }
 </script>
-</html>
-<!--Embed the footer.html template at this location-->
-{{ template "footer.html" .}}
+
