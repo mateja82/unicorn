@@ -1,87 +1,93 @@
+<!--index.html-->
+
+<!--Embed the header.html template at this location-->
+{{ template "header.html" .}}
+
 <style>
-        * {
-            margin: 0;
-            padding: 0;
-            text-align: center;
-            font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
-        }
-        a{
-            text-decoration: none;
-        }
-        .div-block .img{
-            width: 15%;
-            height: 50%;
-            /* display: inline-block; */
-            float: right;
-        }
-        .div-block img.img-thumbnail.rounded.mx-auto.d-block.img-fluid{
-            height: 100px;
-            width: 150px;
-        }
-        .inner-div-block{
-            width: 85%;
-            display: inline-block;
-            color: #000000
-        }
-        .center-fit {
-            max-width: 500px;
-            width: 100%;
-            max-height: 100vh;
-            margin: auto;
-        }
-        .holder {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      code {
-        font-size: 9px !important;
-        overflow-x: scroll;
-      }
-      .div-block a h2{
-        text-align: left;
-        margin-bottom: 5px;
-      }
-      .div-block a{
-        float: left;
-      }
-      .div-block p,.div-block h2{
-        text-align: left;
-      }
-      .div-block{
-        position: relative;
-        padding: 10px 7px 20px;
-        margin-bottom: 25px;
-        text-align: left;
-        box-shadow: 10px 12px 30px 5px #ddd;
-      }
-      .div-block:before{
-        content: "";
-        position: absolute;
-        display: block;
-        width: 1px;
-        height: 117%;
-        background-color: #EEE;
-        left: 0px;
-        top: 0px;
-        transition: .4s all ease-in-out;
-        z-index: -1;
-      }
-      .div-block:hover:before{
-        width: 100%;
-      }
-      @media (max-width: 425px) {
-        .inner-div-block{
-          width: 57%;
-        }
-        .div-block .img{
-          width: 43%;
-        }
-        .div-block img.img-thumbnail.rounded.mx-auto.d-block.img-fluid{
-          height: 120px;
-        }
-      }
-    </style>
+  * {
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
+  }
+  a{
+      text-decoration: none;
+  }
+  .div-block .img{
+      width: 15%;
+      height: 50%;
+      /* display: inline-block; */
+      float: right;
+  }
+  .div-block img.img-thumbnail.rounded.mx-auto.d-block.img-fluid{
+      height: 100px;
+      width: 150px;
+  }
+  .inner-div-block{
+      width: 85%;
+      display: inline-block;
+      color: #000000
+  }
+  .center-fit {
+      max-width: 500px;
+      width: 100%;
+      max-height: 100vh;
+      margin: auto;
+  }
+  .holder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+code {
+  font-size: 9px !important;
+  overflow-x: scroll;
+}
+.div-block a h2{
+  text-align: left;
+  margin-bottom: 5px;
+}
+.div-block a{
+  float: left;
+}
+.div-block p,.div-block h2{
+  text-align: left;
+}
+.div-block{
+  position: relative;
+  padding: 10px 7px 20px;
+  margin-bottom: 25px;
+  text-align: left;
+  box-shadow: 10px 12px 30px 5px #ddd;
+}
+.div-block:before{
+  content: "";
+  position: absolute;
+  display: block;
+  width: 1px;
+  height: 117%;
+  background-color: #EEE;
+  left: 0px;
+  top: 0px;
+  transition: .4s all ease-in-out;
+  z-index: -1;
+}
+.div-block:hover:before{
+  width: 100%;
+}
+@media (max-width: 425px) {
+  .inner-div-block{
+    width: 57%;
+  }
+  .div-block .img{
+    width: 43%;
+  }
+  .div-block img.img-thumbnail.rounded.mx-auto.d-block.img-fluid{
+    height: 120px;
+  }
+}
+</style>
+
   <h2 class="ui header">Welcome to Unicorn Pursuit</h2>
 <div class="imgbox">
     <img src="https://g.foolcdn.com/editorial/images/550276/unicorn-wearing-i-love-unicorns-sweater-standing-in-front-of-a-rainbow.jpg" alt="Unicorn Pursuit" class="center-fit" >
@@ -93,179 +99,41 @@
     Once you Register/Login, you will be able to check them out, and vote for the ones you like most.
   </h3>
 </body>
-<div class="container">
-      <div class="div-block">
+
+{{range .payload }}
+<hr>
+<div class="div-block">
   <div class="inner-div-block">
       <!--Display the title of the project -->
         <h2>{{.Title}}</h2>
         <!--Display the content of the project-->
         <p>Proposed by: {{.Owner}}</p>
         <p>Description: {{.Content}}</p>
-        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>      
+        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Click for more info </a>      
   </div>
     <div class="img">
       <img 
-      src="https://i.postimg.cc/sgMZ1PtY/banner-1.jpg" 
+      src="{{.Photo}}" 
       alt="" 
       class="img-thumbnail rounded mx-auto d-block img-fluid">
     </div>
 </div>
-
-<hr>
-
-<div class="div-block">
-  
-    <div class="inner-div-block">
-        <!--Display the title of the project -->
-        <h2>{{.Title}}</h2>
-        <!--Display the content of the project-->
-        <p>Proposed by: {{.Owner}}</p>
-        <p>Description: {{.Content}}</p>
-        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
-      </div>
-    <div class="img"><img src="https://i.postimg.cc/zXcymbVV/banner-8.png" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
-</div>
-
-<hr>
-
-<div class="div-block">
-    <div class="inner-div-block">
-        <!--Display the title of the project -->
-        <h2>{{.Title}}</h2>
-        <!--Display the content of the project-->
-        <p>Proposed by: {{.Owner}}</p>
-        <p>Description: {{.Content}}</p>
-        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
-      </div>
-    <div class="img"><img src="https://i.postimg.cc/NfSjJ3zX/banner-3.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
-</div>
-
-<hr>
-
-<div class="div-block">
-    <div class="inner-div-block">
-        <!--Display the title of the project -->
-        <h2>{{.Title}}</h2>
-        <!--Display the content of the project-->
-        <p>Proposed by: {{.Owner}}</p>
-        <p>Description: {{.Content}}</p>
-        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
-      </div>
-    <div class="img"><img src="https://i.postimg.cc/htVcCfxF/banner-4.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
-</div>
-
-<hr>
-
-<div class="div-block">
-    <div class="inner-div-block">
-        <!--Display the title of the project -->
-        <h2>{{.Title}}</h2>
-        <!--Display the content of the project-->
-        <p>Proposed by: {{.Owner}}</p>
-        <p>Description: {{.Content}}</p>
-        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
-      </div>
-    <div class="img"><img src="https://i.postimg.cc/Znv1CMxk/bikes.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
-</div>
-
-<hr>
-
-<div class="div-block">
-    <div class="inner-div-block">
-        <!--Display the title of the project -->
-        <h2>{{.Title}}</h2>
-        <!--Display the content of the project-->
-        <p>Proposed by: {{.Owner}}</p>
-        <p>Description: {{.Content}}</p>
-        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
-      </div>
-    <div class="img"><img src="https://i.postimg.cc/RZTVSW07/banner-7.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
-</div>
-
-<hr>
-
-<div class="div-block">
-  <div class="inner-div-block">
-      <!--Display the title of the project -->
-      <h2>{{.Title}}</h2>
-      <!--Display the content of the project-->
-      <p>Proposed by: {{.Owner}}</p>
-      <p>Description: {{.Content}}</p>
-      <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
-    </div>
-  <div class="img"><img src="https://i.postimg.cc/zXcymbVV/banner-8.png" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
-  
-</div>
-
-<hr>
-
-<div class="div-block">
-    <div class="inner-div-block">
-        <!--Display the title of the project -->
-        <h2>{{.Title}}</h2>
-        <!--Display the content of the project-->
-        <p>Proposed by: {{.Owner}}</p>
-        <p>Description: {{.Content}}</p>
-        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
-      </div>
-    <div class="img"><img src="https://i.postimg.cc/htVcCfxF/banner-4.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
-</div>
-
-<hr>
-
-<div class="div-block">
-  <div class="inner-div-block">
-      <!--Display the title of the project -->
-      <h2>{{.Title}}</h2>
-      <!--Display the content of the project-->
-      <p>Proposed by: {{.Owner}}</p>
-      <p>Description: {{.Content}}</p>
-      <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
-    </div>
-  <div class="img"><img src="https://i.postimg.cc/htVcCfxF/banner-4.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
-</div>
-
-<hr>
-
-<div class="div-block">
-    <div class="inner-div-block">
-        <!--Display the title of the project -->
-        <h2>{{.Title}}</h2>
-        <!--Display the content of the project-->
-        <p>Proposed by: {{.Owner}}</p>
-        <p>Description: {{.Content}}</p>
-        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
-      </div>
-    <div class="img"><img src="https://i.postimg.cc/zXcymbVV/banner-8.png" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
-</div>
-<!-- {{range .payload }} -->
-<!-- <div class="div-block">
-  <a href="/project/view/{{.ID}}"> -->
-    <!--Display the title of the project -->
-    <!-- <hr>
-      <h2>{{.Title}}</h2>
-      </a>
-        Display the content of the project -->
-        <!-- <p>Proposed by: {{.Owner}}</p>
-        <p>Description: {{.Content}}</p>
-</div>
-{{end}} -->
-</div>
-
+{{end}}
 
 <script>
-$(".ui.accordion").accordion();
-if (document.location.search.includes("error")) {
-  const m = document.getElementById("message");
-  m.style.display = "block";
-  const err = document.location.search.replace("?error=", "");
-  m.textContent = decodeURI(err);
-}
-if (document.location.search.includes("authres")) {
-  const m = document.getElementById("authres");
-  m.style.display = "block";
-  const err = document.location.search.replace("?authres=", "");
-  m.textContent = decodeURI(err);
-}
-</script>
-
+  $(".ui.accordion").accordion();
+  if (document.location.search.includes("error")) {
+    const m = document.getElementById("message");
+    m.style.display = "block";
+    const err = document.location.search.replace("?error=", "");
+    m.textContent = decodeURI(err);
+  }
+  if (document.location.search.includes("authres")) {
+    const m = document.getElementById("authres");
+    m.style.display = "block";
+    const err = document.location.search.replace("?authres=", "");
+    m.textContent = decodeURI(err);
+  }
+  </script>
+<!--Embed the footer.html template at this location-->
+{{ template "footer.html" .}}

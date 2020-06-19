@@ -1,110 +1,114 @@
+<!--leaderboard.html-->
 
-    <style>
-        *{
-          margin: 0;
-          padding: 0;
-          text-align: center;
-          font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
-        }
-        a{
-            text-decoration: none;
-        }
-        .div-block{
-            text-align: left;
-        }
-        .div-block .img{
-            width: 15%;
-            height: 50%;
-            /* display: inline-block; */
-            float: right;
-        }
-        .div-block img.img-thumbnail.rounded.mx-auto.d-block.img-fluid{
-            height: 100px;
-            width: 150px;
-        }
-        .inner-div-block{
-            width: 85%;
-            display: inline-block;
-        }
-        .center-fit {
-            max-width: 500px;
-            width: 100%;
-            max-height: 100vh;
-            margin: auto;
-        }
-        .holder {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .cover-block {
-        padding: 22px 0px 22px;
-    }
-      .all_page{
-          background: url('https://i.postimg.cc/j29nhLfw/cover.jpg');
-          background-size: cover;
-          background-repeat: no-repeat;
-          background-position: center;
-          background-color: #fff;
-          /* padding: 6.9rem 0; */
-        }
-        .div-block a{
-        float: left;
-      }
-      .div-block p,.div-block h2{
-        text-align: left;
-      }
-      code {
-        font-size: 9px !important;
-        overflow-x: scroll;
-      }
-      
-      .div-block a{
-        text-decoration: none;
-      }
-      .div-block a h2{
-        text-align: left;
-        margin-bottom: 5px;
-      }
-      .div-block p{
-        text-align: left;
-      }
-      .div-block{
-        position: relative;
-        padding: 10px 7px 20px;
-        margin-bottom: 25px;
-        text-align: left;
-        box-shadow: 10px 12px 30px 5px #ddd;
-        z-index: 1;
-      }
-      .div-block:before{
-        content: "";
-        position: absolute;
-        display: block;
-        width: 1px;
-        height: 117%;
-        background-color: #EEE;
-        left: 0px;
-        top: 0px;
-        transition: .4s all ease-in-out;
-        z-index: -1;
-      }
-      .div-block:hover:before{
-        width: 100%;
-      }
-      @media (max-width: 425px) {
-        .inner-div-block{
-          width: 57%;
-        }
-        .div-block .img{
-          width: 43%;
-        }
-        .div-block img.img-thumbnail.rounded.mx-auto.d-block.img-fluid{
-          height: 120px;
-        }
-      }
-    </style>
+<!--Embed the header.html template at this location-->
+{{ template "header.html" .}}
+<style>
+  *{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
+  }
+  a{
+      text-decoration: none;
+  }
+  .div-block{
+      text-align: left;
+  }
+  .div-block .img{
+      width: 15%;
+      height: 50%;
+      /* display: inline-block; */
+      float: right;
+  }
+  .div-block img.img-thumbnail.rounded.mx-auto.d-block.img-fluid{
+      height: 100px;
+      width: 150px;
+  }
+  .inner-div-block{
+      width: 85%;
+      display: inline-block;
+  }
+  .center-fit {
+      max-width: 500px;
+      width: 100%;
+      max-height: 100vh;
+      margin: auto;
+  }
+  .holder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cover-block {
+  padding: 22px 0px 22px;
+}
+.all_page{
+    background: url('https://i.postimg.cc/j29nhLfw/cover.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #fff;
+    /* padding: 6.9rem 0; */
+  }
+  .div-block a{
+  float: left;
+}
+.div-block p,.div-block h2{
+  text-align: left;
+}
+code {
+  font-size: 9px !important;
+  overflow-x: scroll;
+}
+
+.div-block a{
+  text-decoration: none;
+}
+.div-block a h2{
+  text-align: left;
+  margin-bottom: 5px;
+}
+.div-block p{
+  text-align: left;
+}
+.div-block{
+  position: relative;
+  padding: 10px 7px 20px;
+  margin-bottom: 25px;
+  text-align: left;
+  box-shadow: 10px 12px 30px 5px #ddd;
+  z-index: 1;
+}
+.div-block:before{
+  content: "";
+  position: absolute;
+  display: block;
+  width: 1px;
+  height: 117%;
+  background-color: #EEE;
+  left: 0px;
+  top: 0px;
+  transition: .4s all ease-in-out;
+  z-index: -1;
+}
+.div-block:hover:before{
+  width: 100%;
+}
+@media (max-width: 425px) {
+  .inner-div-block{
+    width: 57%;
+  }
+  .div-block .img{
+    width: 43%;
+  }
+  .div-block img.img-thumbnail.rounded.mx-auto.d-block.img-fluid{
+    height: 120px;
+  }
+}
+</style>
 </head>
+
 
 <body>
   <div class="all_page">
@@ -116,168 +120,26 @@
         <h3>
           Find the submitted projects, ranked by votes, below. The race is long, things still might change.
         </h3>
-        <div class="container">
-          <div class="div-block">
-            <div class="inner-div-block">
-                <!--Display the title of the project -->
-                  <h2>{{.Title}}</h2>
-                  <!--Display the content of the project-->
-                  <p>Proposed by: {{.Owner}}</p>
-                  <p>Description: {{.Content}}</p>
-                  <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>      
-            </div>
-              <div class="img">
-                <img 
-                src="https://i.postimg.cc/sgMZ1PtY/banner-1.jpg" 
-                alt="" 
-                class="img-thumbnail rounded mx-auto d-block img-fluid">
-              </div>
-          </div>
-          
-          <hr>
-          
-          <div class="div-block">
-            
-              <div class="inner-div-block">
-                  <!--Display the title of the project -->
-                  <h2>{{.Title}}</h2>
-                  <!--Display the content of the project-->
-                  <p>Proposed by: {{.Owner}}</p>
-                  <p>Description: {{.Content}}</p>
-                  <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
-                </div>
-              <div class="img"><img src="https://i.postimg.cc/zXcymbVV/banner-8.png" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
-          </div>
-          
-          <hr>
-          
-          <div class="div-block">
-              <div class="inner-div-block">
-                  <!--Display the title of the project -->
-                  <h2>{{.Title}}</h2>
-                  <!--Display the content of the project-->
-                  <p>Proposed by: {{.Owner}}</p>
-                  <p>Description: {{.Content}}</p>
-                  <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
-                </div>
-              <div class="img"><img src="https://i.postimg.cc/NfSjJ3zX/banner-3.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
-          </div>
-          
-          <hr>
-          
-          <div class="div-block">
-              <div class="inner-div-block">
-                  <!--Display the title of the project -->
-                  <h2>{{.Title}}</h2>
-                  <!--Display the content of the project-->
-                  <p>Proposed by: {{.Owner}}</p>
-                  <p>Description: {{.Content}}</p>
-                  <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
-                </div>
-              <div class="img"><img src="https://i.postimg.cc/htVcCfxF/banner-4.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
-          </div>
-          
-          <hr>
-          
-          <div class="div-block">
-              <div class="inner-div-block">
-                  <!--Display the title of the project -->
-                  <h2>{{.Title}}</h2>
-                  <!--Display the content of the project-->
-                  <p>Proposed by: {{.Owner}}</p>
-                  <p>Description: {{.Content}}</p>
-                  <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
-                </div>
-              <div class="img"><img src="https://i.postimg.cc/Znv1CMxk/bikes.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
-          </div>
-          
-          <hr>
-          
-          <div class="div-block">
-              <div class="inner-div-block">
-                  <!--Display the title of the project -->
-                  <h2>{{.Title}}</h2>
-                  <!--Display the content of the project-->
-                  <p>Proposed by: {{.Owner}}</p>
-                  <p>Description: {{.Content}}</p>
-                  <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
-                </div>
-              <div class="img"><img src="https://i.postimg.cc/RZTVSW07/banner-7.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
-          </div>
-          
-          <hr>
-          
-          <div class="div-block">
-            <div class="inner-div-block">
-                <!--Display the title of the project -->
-                <h2>{{.Title}}</h2>
-                <!--Display the content of the project-->
-                <p>Proposed by: {{.Owner}}</p>
-                <p>Description: {{.Content}}</p>
-                <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
-              </div>
-            <div class="img"><img src="https://i.postimg.cc/zXcymbVV/banner-8.png" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
-            
-          </div>
-          
-          <hr>
-          
-          <div class="div-block">
-              <div class="inner-div-block">
-                  <!--Display the title of the project -->
-                  <h2>{{.Title}}</h2>
-                  <!--Display the content of the project-->
-                  <p>Proposed by: {{.Owner}}</p>
-                  <p>Description: {{.Content}}</p>
-                  <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
-                </div>
-              <div class="img"><img src="https://i.postimg.cc/htVcCfxF/banner-4.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
-          </div>
-          
-          <hr>
-          
-          <div class="div-block">
-            <div class="inner-div-block">
-                <!--Display the title of the project -->
-                <h2>{{.Title}}</h2>
-                <!--Display the content of the project-->
-                <p>Proposed by: {{.Owner}}</p>
-                <p>Description: {{.Content}}</p>
-                <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
-              </div>
-            <div class="img"><img src="https://i.postimg.cc/htVcCfxF/banner-4.jpg" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
-          </div>
-          
-          <hr>
-          
-          <div class="div-block">
-              <div class="inner-div-block">
-                  <!--Display the title of the project -->
-                  <h2>{{.Title}}</h2>
-                  <!--Display the content of the project-->
-                  <p>Proposed by: {{.Owner}}</p>
-                  <p>Description: {{.Content}}</p>
-                  <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
-                </div>
-              <div class="img"><img src="https://i.postimg.cc/zXcymbVV/banner-8.png" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
-          </div>
-      </div>
-        <!--Loop over the `payload` variable, which is the list of projects-->
-        <!-- {{range .payload }} -->
-          <!--Create the link for the project based on its ID-->
-          <!-- <div class="div-block">
-          <a href="/project/view/{{.ID}}">
-            <hr> -->
-            <!--Display the title of the project -->
-            <!-- <h2>{{.Title}}</h2> -->
-          <!-- </a> -->
-          <!--Display the content of the project-->
-          <!-- <p>Proposed by: {{.Owner}}</p>
-          <p>Number of Votes: {{.Votes}}</p>
-        </div>
-        {{end}} --> 
+
       <!-- cover-block -->
     </div>
     <!-- all page -->
   </div>
+          {{range .payload }}
+          <hr>
+          <div class="div-block">
+            
+            <div class="inner-div-block">
+                <!--Display the title of the project -->
+                <h2>{{.Title}}</h2>
+                <!--Display the content of the project-->
+                <p>Proposed by: {{.Owner}}</p>
+                <p>This project currently has {{.Votes}} votes</p>
+                <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Read more </a>
+              </div>
+            <div class="img"><img src="{{.Photo}}" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
+        </div>
+          {{end}}
+</body>
 <!--Embed the footer.html template at this location-->
+{{ template "footer.html" .}}

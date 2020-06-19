@@ -1,94 +1,100 @@
+<!--about.html-->
+<!--Embed the header.html template at this location-->
+{{ template "header.html" .}}
 <style>
-        * {
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
+  * {
+      margin: 0;
+      padding: 0;
+      text-align: center;
+  }
 
-        .center-fit {
-          width: 100%;
-          max-width: 500px;
-          max-height: 100vh;
-          margin: auto;
-        }
-        .holder {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      code {
-        font-size: 9px !important;
-        overflow-x: scroll;
-      }
-      .custom-box{
-        display: inline-block;
-      }
-      .imgbox .custom-box .icon{
-        margin-bottom: 20px;
-        font-size: 75px;
-      }
-      /* .imgbox .custom-box.after:after{
-        content: "";
-        position: absolute;
-        display: block;
-        width: 4px;
-        height: 20%;
-        background-color: #EEE;
-        left: 48.3%;
-        /* right: 0; 
-        top: 61%;
-        transition: .4s all ease-in-out;
-        z-index: -1;
-      } */
-      .imgbox .custom-box .contant-icon{
-        display: inline-block;
-        /* margin-left: 25px; */
-        /* width: 50%; */
-        font-family: sans-serif;
-      }
-      .imgbox .custom-box .para{
-        font-size: 21px;
-        /* text-transform: uppercase; */
-      }
-      .imgbox .custom-box{
-        margin-bottom: 40px;
-        margin-top: 55px;
-      }
-      .imgbox .custom-box.left{
-        margin-left: 15px;
-      }
+  .center-fit {
+    width: 100%;
+    max-width: 500px;
+    max-height: 100vh;
+    margin: auto;
+  }
+  .holder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+code {
+  font-size: 9px !important;
+  overflow-x: scroll;
+}
+.custom-box{
+  display: inline-block;
+}
+.imgbox .custom-box .icon{
+  margin-bottom: 20px;
+  font-size: 75px;
+}
+/* .imgbox .custom-box.after:after{
+  content: "";
+  position: absolute;
+  display: block;
+  width: 4px;
+  height: 20%;
+  background-color: #EEE;
+  left: 48.3%;
+  /* right: 0; 
+  top: 61%;
+  transition: .4s all ease-in-out;
+  z-index: -1;
+} */
+.imgbox .custom-box .contant-icon{
+  display: inline-block;
+  /* margin-left: 25px; */
+  /* width: 50%; */
+  font-family: sans-serif;
+}
+.imgbox .custom-box .para{
+  font-size: 21px;
+  /* text-transform: uppercase; */
+}
+.imgbox .custom-box{
+  margin-bottom: 40px;
+  margin-top: 55px;
+}
+.imgbox .custom-box.left{
+  margin-left: 15px;
+}
 
-    </style>
+</style>
 </head>
 
 <body>
-  <h2 class="ui header">About Unicorn Pursuit</h2>
-  <div class="imgbox">
+<h2 class="ui header">About Unicorn Pursuit</h2>
+<div class="imgbox">
 
-    <div class="custom-box after">
-      <div class="icon"><i class="fas fa-lightbulb"></i></div>
-      <div class="contant-icon">
-        <p class="para">You have an awesome idea.</p>
-        <p class="para">But no time on resources to bring it to life?</p>
-        <p class="para">Your time is now?</p>
-      </div>
-    </div>
+<div class="custom-box after">
+<div class="icon"><i class="fas fa-lightbulb"></i></div>
+<div class="contant-icon">
+  <p class="para">You have an awesome idea.</p>
+  <p class="para">But no time on resources to bring it to life?</p>
+  <p class="para">Your time is now?</p>
+</div>
+</div>
 
-    <div class="custom-box left">
-      <div class="icon"><i class="fas fa-chart-bar"></i></div>
-      <div class="contant-icon">
-        <p class="para">Turn your idea into startup</p>
-        <p class="para">Get sponsership and lead the implementation !</p>
-        <p class="para">Your time is now?</p>
-      </div>
-    </div>
+<div class="custom-box left">
+<div class="icon"><i class="fas fa-chart-bar"></i></div>
+<div class="contant-icon">
+  <p class="para">Turn your idea into startup</p>
+  <p class="para">Get sponsership and lead the implementation !</p>
+  <p class="para">Your time is now?</p>
+</div>
+</div>
 
-    <div class="custom-box">
-      <div class="icon"><i class="fas fa-arrows-alt"></i></div>
-      <div class="contant-icon">
-        <p class="para">Help cepsa expand to new fields of energy bussiness models</p>
-        <p class="para">At home : move : work</p>
-        <p class="para">Your time is now?</p>
-      </div>
-    </div>
-  </div>
+<div class="custom-box">
+<div class="icon"><i class="fas fa-arrows-alt"></i></div>
+<div class="contant-icon">
+  <p class="para">Help cepsa expand to new fields of energy bussiness models</p>
+  <p class="para">At home : move : work</p>
+  <p class="para">Your time is now?</p>
+</div>
+</div>
+</div>
+
+<!--Embed the footer.html template at this location-->
+{{ template "footer.html" .}}
