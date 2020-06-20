@@ -1,10 +1,7 @@
 <!--login.html-->
 
-<!DOCTYPE html>
-<html lang="en">
-  <!--Embed the header.html template at this location-->
+<!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
-
 <style>
   *{
       margin: 0;
@@ -43,6 +40,12 @@
 </head>
 <body>
   <div class="all_page">
+     <!--If there's an error, display the error-->
+     {{ if .ErrorTitle}}
+     <p class="bg-danger">
+       {{.ErrorTitle}}: {{.ErrorMessage}}
+     </p>
+     {{end}}
     <div class="holder">
       <div class="ui raised text container">
         <div class="column">
@@ -108,4 +111,3 @@ if (document.location.search.includes("authres")) {
 
   <!--Embed the footer.html template at this location-->
 {{ template "footer.html" .}}
-</html>

@@ -120,6 +120,12 @@ code {
         <h3>
           Find the submitted projects, ranked by votes, below. The race is long, things still might change.
         </h3>
+              <!--If there's an error, display the error-->
+      {{ if .ErrorTitle}}
+      <p class="bg-danger">
+        {{.ErrorTitle}}: {{.ErrorMessage}}
+      </p>
+      {{end}}
 
       <!-- cover-block -->
     </div>

@@ -3,6 +3,13 @@
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
 
+<!--If there's an error, display the error-->
+{{ if .ErrorTitle}}
+<p class="bg-danger">
+  {{.ErrorTitle}}: {{.ErrorMessage}}
+</p>
+{{end}}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>

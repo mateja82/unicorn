@@ -28,6 +28,12 @@
     crossorigin="anonymous">
   </script>
   <title>Welcome to Unicorn Pursuit</title>
+  <!--If there's an error, display the error-->
+  {{ if .ErrorTitle}}
+  <p class="bg-danger">
+    {{.ErrorTitle}}: {{.ErrorMessage}}
+  </p>
+  {{end}}
     <style>
         *{
           margin: 0;

@@ -89,6 +89,12 @@ code {
 </style>
 
   <h2 class="ui header">Welcome to Unicorn Pursuit</h2>
+        <!--If there's an error, display the error-->
+        {{ if .ErrorTitle}}
+        <p class="bg-danger">
+          {{.ErrorTitle}}: {{.ErrorMessage}}
+        </p>
+        {{end}}
 <div class="imgbox">
     <img src="https://g.foolcdn.com/editorial/images/550276/unicorn-wearing-i-love-unicorns-sweater-standing-in-front-of-a-rainbow.jpg" alt="Unicorn Pursuit" class="center-fit" >
   </div>

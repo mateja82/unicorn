@@ -2,6 +2,11 @@
 
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
+{{ if .ErrorTitle}}
+<p class="bg-danger">
+  {{.ErrorTitle}}: {{.ErrorMessage}}
+</p>
+{{end}}
 <style>
   * {
       margin: 0;
