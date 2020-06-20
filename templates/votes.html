@@ -1,0 +1,64 @@
+<!--votes.html-->
+<!--Embed the header.html template at this location-->
+{{ template "header.html" .}}
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
+        }
+
+        .center-fit {
+            max-width: 500px;
+            width: 100%;
+            max-height: 100vh;
+            margin: auto;
+        }
+        .holder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      code {
+        font-size: 9px !important;
+        overflow-x: scroll;
+      }
+      .para p{
+        font-size: 18px;
+      }
+      .all_page{
+        background: url('https://i.postimg.cc/j29nhLfw/cover.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        padding: 30px 0px;
+      }
+    </style>
+</head>
+
+<body>
+  <div class="all_page">
+    <h3 class="ui header">Check out "My Votes" section to see how you've voted</h3>
+    <div class="imgbox">
+        <img src="https://i.postimg.cc/Z5PFJx3w/vote.png" alt="Votes" class="center-fit" >
+      </div>
+    <br>
+    <div class="para">
+      <p>{{.voted1}}</p>
+      <br>
+      <p>{{.voted2}}</p>
+      <br>
+      <p>{{.voted3}}</p>
+      <br>
+      <p>{{.voted4}}</p>
+      <br>
+      <p>{{.voted5}}</p>
+      <br>
+    </div>  
+  </div>
+
+
+<!--Embed the footer.html template at this location-->
+{{ template "footer.html" .}}
