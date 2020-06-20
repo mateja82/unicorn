@@ -22,30 +22,32 @@
   }
   #footer .upper-icons li{
     float: left;
-    font-size: 30px;
-    padding: 5px 5px;
     margin-left: 5px;
     cursor: pointer;
   }
-  #footer .upper-icons li:nth-child(1){
+ #footer .upper-icons li a {
+    padding: 5px 5px;
+    font-size: 30px;
+    }
+  #footer .upper-icons li a:nth-child(1){
     background-color: #55acee;
     border: 1px solid transparent;
     transition: all .6s ease-in-out;
     color: #fff;  
   }
-  #footer .upper-icons li:nth-child(1):hover{
+  #footer .upper-icons li a:nth-child(1):hover{
     color: #55acee;
     border: 1px solid #55acee;
     border-radius: 50%;
     background-color: transparent;
   }
-  #footer .upper-icons li:nth-child(2){
+  #footer .upper-icons li a:nth-child(2){
     background-color: #211F1F;
     border: 1px solid transparent;
     transition: all .6s ease-in-out;
     color: #fff;
   }
-  #footer .upper-icons li:nth-child(2):hover{
+  #footer .upper-icons li a:nth-child(2):hover{
     color: #211F1F;
     border: 1px solid #211F1F;
     border-radius: 50%;
@@ -70,8 +72,9 @@
     clear: both;
 }
   </style>
+
     <footer id="footer">
-        <div class="container-fluid ">
+        <div class="container">
             <div class="row-fluid content-row">
                 <div class="inner-footer">
                     <div class="upper-footer">
@@ -79,8 +82,8 @@
                         <a href="/"><img src="https://i.postimg.cc/BbRqXDW6/output-onlinepngtools.png" alt="Unicorn Pursui" width="55px"></a>   
                         </div>
                         <ul class="upper-icons">
-                        <li class="upper-list-items"><i class="fab fa-twitter"></i><a href="https://twitter.com/MatJovanovic"></a></li>
-                        <li class="upper-list-items"><i class="fab fa-github"></i><a href=https://github.com/mateja82/unicorn></a></li>
+                        <li class="upper-list-items"><a href="https://twitter.com/MatJovanovic"><i class="fab fa-twitter"></i></a></li>
+                        <li class="upper-list-items"><a href=https://github.com/mateja82/unicorn><i class="fab fa-github"></i></a></li>
                         </ul>
                     </div>
                     <div class="footer-cont">
