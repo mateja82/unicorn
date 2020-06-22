@@ -125,6 +125,7 @@ code {
     </div>
     <!-- all page -->
   </div>
+ <div class="container">
           {{range .payload }}
           <hr>
           <div class="div-block">
@@ -140,6 +141,7 @@ code {
             <div class="img"><img src="{{.Photo}}" alt="" class="img-thumbnail rounded mx-auto d-block img-fluid"></div>
         </div>
           {{end}}
+  </div>
 </body>
 <!--Embed the footer.html template at this location-->
 {{ template "footer.html" .}}
