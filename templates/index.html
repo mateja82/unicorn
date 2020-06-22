@@ -106,6 +106,7 @@ code {
   </h3>
 </body>
 
+<div class="container">
 {{range .payload }}
 <hr>
 <div class="div-block">
@@ -125,7 +126,7 @@ code {
     </div>
 </div>
 {{end}}
-
+</div>
 <script>
   $(".ui.accordion").accordion();
   if (document.location.search.includes("error")) {
