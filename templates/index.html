@@ -95,17 +95,47 @@ code {
           {{.ErrorTitle}}: {{.ErrorMessage}}
         </p>
         {{end}}
+<h3>
+Make sure you Register, if you want to see the already submitted project ideas.
+</h3>
 <div class="imgbox">
     <img src="https://g.foolcdn.com/editorial/images/550276/unicorn-wearing-i-love-unicorns-sweater-standing-in-front-of-a-rainbow.jpg" alt="Unicorn Pursuit" class="center-fit" >
   </div>
   <h3>
-    You will find the already submitted project ideas below.
+    You can submit your idea, and vote for the others.
   </h3>
-  <h3>
-    Once you Register/Login, you will be able to check them out, and vote for the ones you like most.
-  </h3>
+
 </body>
 
+<!--Content to Display when user is NOT logged in -->
+{{ if not .is_logged_in }}
+<hr>
+<h3>
+  Unicorn Pursuit is an Open Source project for pitching and voting for ideas.
+</h3>
+<div class="imgbox">
+  <a href="https://github.com/mateja82/unicorn">
+  <img src="https://github.githubassets.com/images/modules/open_graph/github-mark.png" alt="GitHub repo" class="center-fit" >
+</a>
+<h3>
+  Click to check out and collaborate on the Source Code.
+</h3>
+</div>
+<hr>
+<h3>
+  Digital Green Energy Initiatives.
+</h3>
+<div class="imgbox">
+  <img src="https://i.pinimg.com/736x/3c/72/a2/3c72a247162f95df116f1b1e9b2ad148.jpg" alt="Unicorn Pursuit" class="center-fit" >
+</div>
+<h3>
+  Make sure to Register, if you want to see the already submitted project ideas.
+</h3>
+</body>
+{{end}}
+
+<!--Content to Display when user is logged in -->
+{{ if .is_logged_in }}
 <div class="container">
 {{range .payload }}
 <hr>
@@ -116,7 +146,7 @@ code {
         <!--Display the content of the project-->
         <p>Proposed by: {{.Owner}}</p>
         <p>Description: {{.Content}}</p>
-        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> Click for more info </a>      
+        <a href="/project/view/{{.ID}}" class="btn btn-primary btn-md"> More info / Vote </a>      
   </div>
     <div class="img">
       <img 
@@ -127,6 +157,8 @@ code {
 </div>
 {{end}}
 </div>
+{{end}}
+
 <script>
   $(".ui.accordion").accordion();
   if (document.location.search.includes("error")) {
